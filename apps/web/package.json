@@ -1,0 +1,34 @@
+{
+  "name": "@storix/web",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
+    "@storix/sdk": "workspace:*",
+    "@storix/shared": "workspace:*",
+    "@storix/ui": "workspace:*",
+    "@tanstack/react-query": "^5.77.2",
+    "lucide-react": "^0.511.0",
+    "next": "^15.3.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.56.4",
+    "zod": "^3.25.51",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.8",
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "tailwindcss": "^4.1.8",
+    "typescript": "^5.8.3"
+  }
+}

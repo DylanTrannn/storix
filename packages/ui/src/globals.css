@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #fafaf9;
+  --color-foreground: #0c0a09;
+  --color-card: #ffffff;
+  --color-card-foreground: #0c0a09;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #0c0a09;
+  --color-primary: #ca8a04;
+  --color-primary-foreground: #0c0a09;
+  --color-secondary: #f5f5f4;
+  --color-secondary-foreground: #1c1917;
+  --color-muted: #f5f5f4;
+  --color-muted-foreground: #44403c;
+  --color-accent: #1c1917;
+  --color-accent-foreground: #fafaf9;
+  --color-destructive: #dc2626;
+  --color-border: #e7e5e4;
+  --color-input: #e7e5e4;
+  --color-ring: #ca8a04;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  ::selection {
+    background-color: #ca8a04;
+    color: #0c0a09;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .glass-panel {
+    @apply border border-white/20 bg-white/80 shadow-lg backdrop-blur-xl;
+  }
+
+  .glass-panel-dark {
+    @apply border border-white/10 bg-stone-900/90 shadow-xl backdrop-blur-xl;
+  }
+
+  .gold-gradient {
+    background: linear-gradient(135deg, #ca8a04 0%, #eab308 50%, #ca8a04 100%);
+  }
+
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-primary;
+  }
+
+  .heading-display {
+    @apply font-[family-name:var(--font-display)] font-semibold tracking-tight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

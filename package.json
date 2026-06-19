@@ -1,0 +1,25 @@
+{
+  "name": "storix",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
+    "db:generate": "pnpm --filter @storix/api db:generate",
+    "db:migrate": "pnpm --filter @storix/api db:migrate",
+    "db:seed": "pnpm --filter @storix/api db:seed",
+    "generate:sdk": "pnpm --filter @storix/sdk generate"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "prettier": "^3.5.3",
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
+  },
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=20"
+  }
+}
