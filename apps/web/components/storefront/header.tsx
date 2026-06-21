@@ -1,15 +1,16 @@
 import Link from 'next/link';
-import { Heart } from 'lucide-react';
+import type { Collection } from '@storix/shared';
+import { CircleUser, Heart } from 'lucide-react';
 import { CartDrawerTrigger, HeaderIconLink } from '@/components/cart/cart-drawer-trigger';
 import { MobileNav } from '@/components/storefront/mobile-nav';
+import { ShopNavMenu } from '@/components/storefront/shop-nav-menu';
+import { StorefrontSearch } from '@/components/storefront/storefront-search';
 
-const navLinks = [
-  { href: '/collections/all', label: 'Shop' },
-  { href: '/stores', label: 'Stores' },
-  { href: '/account', label: 'Account' },
-];
+interface StorefrontHeaderProps {
+  collections: Collection[];
+}
 
-export function StorefrontHeader() {
+export function StorefrontHeader({ collections }: StorefrontHeaderProps) {
   return (
     <>
       <a
@@ -28,23 +29,19 @@ export function StorefrontHeader() {
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="cursor-pointer rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
+            <ShopNavMenu collections={collections} />
           </nav>
 
           <div className="flex items-center gap-0.5">
+            <StorefrontSearch />
             <HeaderIconLink href="/wishlist" label="Wishlist">
               <Heart className="h-5 w-5" />
             </HeaderIconLink>
             <CartDrawerTrigger />
-            <MobileNav />
+            <HeaderIconLink href="/account" label="Tài khoản">
+              <CircleUser className="h-5 w-5" />
+            </HeaderIconLink>
+            <MobileNav collections={collections} />
           </div>
         </div>
       </header>

@@ -1,12 +1,13 @@
 import { cache } from 'react';
 import { cookies } from 'next/headers';
-import type { Cart, ProductListQuery } from '@storix/shared';
-import { getAccessToken } from '@/lib/auth/cookies';
+import type { Cart, CollectionListQuery, ProductDetail, ProductListQuery } from '@storix/shared';
+import { ApiError } from '@storix/sdk';
+import { getValidAccessToken } from '@/lib/auth/session';
 import { API_URL, CART_SESSION_COOKIE } from '@/lib/api/server-proxy';
 import { getServerClient } from './client';
 
 async function getClient() {
-  const token = await getAccessToken();
+  const token = await getValidAccessToken();
   const cookieStore = await cookies();
   const cartSession = cookieStore.get(CART_SESSION_COOKIE)?.value;
 
@@ -16,7 +17,7 @@ async function getClient() {
 async function fetchCart(): Promise<Cart> {
   const headers = await (async () => {
     const h = new Headers();
-    const token = await getAccessToken();
+    const token = await getValidAccessToken();
     if (token) h.set('Authorization', `Bearer ${token}`);
     const cookieStore = await cookies();
     const cartSession = cookieStore.get(CART_SESSION_COOKIE)?.value;
@@ -30,6 +31,12 @@ async function fetchCart(): Promise<Cart> {
   }
   return response.json();
 }
+
+export const getNavCollections = cache(async (limit = 50) => {
+  const client = await getClient();
+  const response = await client.listCollections({ page: 1, limit });
+  return response.data;
+});
 
 export const getFeaturedCollections = cache(async (limit = 4) => {
   const client = await getClient();
@@ -52,6 +59,28 @@ export const getFeaturedProducts = cache(async (limit = 8) => {
 export const getProductBySlug = cache(async (slug: string) => {
   const client = await getClient();
   return client.getProductBySlug(slug);
+});
+
+export const getProductBySlugWithPreview = cache(async (
+  slug: string,
+): Promise<{ product: ProductDetail; isPreview: boolean }> => {
+  try {
+    const product = await getProductBySlug(slug);
+    return { product, isPreview: false };
+  } catch (error) {
+    if (!(error instanceof ApiError) || error.status !== 404) {
+      throw error;
+    }
+
+    const user = await getCurrentUser();
+    if (user?.role !== 'admin') {
+      throw error;
+    }
+
+    const client = await getClient();
+    const product = await client.previewProductBySlug(slug);
+    return { product, isPreview: true };
+  }
 });
 
 export const getCollectionBySlug = cache(
@@ -98,11 +127,6 @@ export const getWishlist = cache(async () => {
   return client.getWishlist();
 });
 
-export const getStoreLocations = cache(async () => {
-  const client = await getClient();
-  return client.listStoreLocations();
-});
-
 export const getCurrentUser = cache(async () => {
   const client = await getClient();
   try {
@@ -115,6 +139,11 @@ export const getCurrentUser = cache(async () => {
 export const getOrder = cache(async (id: string) => {
   const client = await getClient();
   return client.getOrder(id);
+});
+
+export const getOrderPaymentInstructions = cache(async (id: string) => {
+  const client = await getClient();
+  return client.getOrderPaymentInstructions(id);
 });
 
 export const getOrders = cache(async (query?: { page?: number; limit?: number }) => {
@@ -134,10 +163,10 @@ export const getAdminCollection = cache(async (id: string) => {
 
 export const getAdminProducts = cache(async (query?: Partial<ProductListQuery>) => {
   const client = await getClient();
-  return client.listProducts(query);
+  return client.listAdminProducts(query);
 });
 
-export const getAdminCollections = cache(async (query?: { page?: number; limit?: number }) => {
+export const getAdminCollections = cache(async (query?: Partial<CollectionListQuery>) => {
   const client = await getClient();
   return client.listCollections(query);
 });

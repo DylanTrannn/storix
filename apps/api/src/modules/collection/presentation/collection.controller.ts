@@ -12,14 +12,14 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   AssignProductsSchema,
+  CollectionListQuerySchema,
   CreateCollectionSchema,
-  PaginationQuerySchema,
   ProductListQuerySchema,
   UpdateCollectionSchema,
 } from '@storix/shared';
 import type {
+  CollectionListQuery,
   CreateCollectionInput,
-  PaginationQuery,
   ProductListQuery,
   UpdateCollectionInput,
 } from '@storix/shared';
@@ -36,8 +36,17 @@ export class CollectionController {
 
   @Get()
   @ApiOperation({ summary: 'List collections' })
-  list(@Query(new ZodValidationPipe(PaginationQuerySchema)) query: PaginationQuery) {
+  list(@Query(new ZodValidationPipe(CollectionListQuerySchema)) query: CollectionListQuery) {
     return this.collectionService.list(query);
+  }
+
+  @Get('detail/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get collection by id (admin)' })
+  getById(@Param('id') id: string) {
+    return this.collectionService.getById(id);
   }
 
   @Get(':slug')

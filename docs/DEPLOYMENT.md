@@ -86,6 +86,16 @@ Default admin: `admin@storix.local` / `admin123456`
 4. Set `R2_*` env vars on the API service (see `apps/api/.env.example`)
 5. Set `NEXT_PUBLIC_R2_PUBLIC_URL` on the web service (same as `R2_PUBLIC_URL`) for Next.js image optimization
 
+**CORS (required for admin image uploads):** Browsers upload directly to R2 using presigned URLs. In the bucket settings, add a CORS rule:
+
+| Setting | Value |
+| --- | --- |
+| Allowed origins | `http://localhost:3000`, your production shop URL |
+| Allowed methods | `PUT`, `GET`, `HEAD` |
+| Allowed headers | Leave empty for Storix defaults, **or** add `Content-Type` if you customize uploads |
+
+**Note:** If Allowed Headers is empty, R2 rejects preflight when the browser sends a `Content-Type` header. Storix uploads omit that header so your current rule (origin + PUT) is enough. If you still see CORS errors, add `Content-Type` to Allowed Headers.
+
 Product thumbnails use the first gallery image (`sortOrder = 0`) — no separate thumbnail field.
 
 ## 5. Local Development

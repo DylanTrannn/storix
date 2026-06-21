@@ -1,8 +1,12 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { ImageIcon } from 'lucide-react';
 import { Button } from '@storix/ui/button';
+import { AdminPagination } from '@/components/admin/admin-pagination';
+import { AdminSearchBar } from '@/components/admin/admin-search-bar';
 import { AdminTable } from '@/components/admin/admin-table';
 import { AdminFormDialog } from '@/components/admin/form-dialog';
 import { AdminPageHeader } from '@/components/admin/page-header';
@@ -12,13 +16,38 @@ interface CollectionRow {
   id: string;
   name: string;
   slug: string;
+  imageUrl?: string | null;
+}
+
+function CollectionThumbnail({ name, imageUrl }: { name: string; imageUrl?: string | null }) {
+  return (
+    <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-md border border-border bg-muted">
+      {imageUrl ? (
+        <Image src={imageUrl} alt={name} fill className="object-cover" sizes="44px" />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+          <ImageIcon className="h-4 w-4" aria-hidden />
+        </div>
+      )}
+    </div>
+  );
 }
 
 interface CollectionsPageContentProps {
   collections: CollectionRow[];
+  page: number;
+  totalPages: number;
+  total: number;
+  search: string;
 }
 
-export function CollectionsPageContent({ collections }: CollectionsPageContentProps) {
+export function CollectionsPageContent({
+  collections,
+  page,
+  totalPages,
+  total,
+  search,
+}: CollectionsPageContentProps) {
   const router = useRouter();
 
   return (
@@ -46,22 +75,32 @@ export function CollectionsPageContent({ collections }: CollectionsPageContentPr
         }
       />
 
+      <div className="mb-4">
+        <AdminSearchBar search={search} placeholder="Search collections by name…" />
+      </div>
+
       <AdminTable
         data={collections}
         getRowKey={(row) => row.id}
-        emptyMessage="No collections yet."
+        emptyMessage={search ? 'No collections match your search.' : 'No collections yet.'}
         columns={[
+          {
+            key: 'thumbnail',
+            header: '',
+            width: '56px',
+            render: (row) => <CollectionThumbnail name={row.name} imageUrl={row.imageUrl} />,
+          },
           {
             key: 'name',
             header: 'Name',
-            width: '40%',
+            width: '35%',
             cellClassName: 'font-medium',
             render: (row) => row.name,
           },
           {
             key: 'slug',
             header: 'Slug',
-            width: '40%',
+            width: '35%',
             cellClassName: 'truncate text-muted-foreground',
             render: (row) => row.slug,
           },
@@ -69,7 +108,7 @@ export function CollectionsPageContent({ collections }: CollectionsPageContentPr
             key: 'actions',
             header: 'Actions',
             align: 'right',
-            width: '20%',
+            width: '15%',
             render: (row) => (
               <Button variant="ghost" size="sm" asChild className="cursor-pointer">
                 <Link href={`/admin/collections/${row.id}`}>Edit</Link>
@@ -77,6 +116,15 @@ export function CollectionsPageContent({ collections }: CollectionsPageContentPr
             ),
           },
         ]}
+      />
+
+      <AdminPagination
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        search={search || undefined}
+        itemLabel="collections"
+        className="mt-4"
       />
     </>
   );

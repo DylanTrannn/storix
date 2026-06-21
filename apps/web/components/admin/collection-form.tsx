@@ -4,11 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { CreateCollectionSchema, type CreateCollectionInput } from '@storix/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Button } from '@storix/ui/button';
 import { Input } from '@storix/ui/input';
 import { Label } from '@storix/ui/label';
 import { Textarea } from '@storix/ui/textarea';
+import { CollectionImageUploader } from '@/components/admin/collection-image-uploader';
 import { createCollectionAction, updateCollectionAction } from '@/lib/actions/admin';
 
 interface CollectionFormProps {
@@ -31,6 +32,7 @@ export function CollectionForm({
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<CreateCollectionInput>({
@@ -73,10 +75,16 @@ export function CollectionForm({
         <Label htmlFor="description">Description</Label>
         <Textarea id="description" rows={3} {...register('description')} />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="imageUrl">Image URL</Label>
-        <Input id="imageUrl" type="url" {...register('imageUrl')} />
-      </div>
+      <Controller
+        name="imageUrl"
+        control={control}
+        render={({ field }) => (
+          <CollectionImageUploader value={field.value} onChange={field.onChange} />
+        )}
+      />
+      {errors.imageUrl && (
+        <p className="text-sm text-destructive">{errors.imageUrl.message}</p>
+      )}
       {error && <p className="text-sm text-destructive">{error}</p>}
       <div className="flex justify-end gap-2 pt-2">
         {onCancel && (

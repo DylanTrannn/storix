@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Scan UI package + web app for Tailwind classes */
+@source "./components";
+@source "../../../apps/web/app";
+@source "../../../apps/web/components";
+
 @theme inline {
   --color-background: #fafaf9;
   --color-foreground: #0c0a09;
@@ -38,6 +43,86 @@
     background-color: #ca8a04;
     color: #0c0a09;
   }
+}
+
+/* ─── Select dropdown (explicit CSS — do not rely on Tailwind scan for portal content) ─── */
+.select-content-popper {
+  position: relative;
+  z-index: 50;
+  overflow: hidden;
+  width: var(--radix-select-trigger-width);
+  min-width: var(--radix-select-trigger-width);
+  max-height: min(18rem, var(--radix-select-content-available-height));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background-color: #ffffff;
+  color: var(--color-foreground);
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.select-viewport {
+  padding: 6px;
+  background-color: #ffffff;
+}
+
+.select-scroll-button {
+  background-color: #ffffff;
+  color: var(--color-muted-foreground);
+}
+
+.select-item {
+  position: relative;
+  display: flex;
+  width: 100%;
+  cursor: pointer;
+  user-select: none;
+  align-items: center;
+  border-radius: var(--radius-md);
+  padding: 10px 36px 10px 12px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  outline: none;
+  background-color: #ffffff;
+  color: var(--color-foreground);
+}
+
+.select-item[data-highlighted] {
+  background-color: var(--color-muted);
+  color: var(--color-foreground);
+}
+
+.select-item[data-disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.select-item-indicator {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.select-item-indicator svg {
+  width: 16px;
+  height: 16px;
+}
+
+.select-label {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.select-separator {
+  margin-left: -4px;
+  margin-right: -4px;
+  height: 1px;
+  background-color: var(--color-border);
 }
 
 @layer utilities {

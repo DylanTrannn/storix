@@ -8,7 +8,6 @@ import {
   FolderOpen,
   ShoppingBag,
   Users,
-  MapPin,
   LogOut,
   type LucideIcon,
 } from 'lucide-react';
@@ -20,7 +19,6 @@ const navItems: { href: string; label: string; icon: LucideIcon }[] = [
   { href: '/admin/collections', label: 'Collections', icon: FolderOpen },
   { href: '/admin/orders', label: 'Orders', icon: ShoppingBag },
   { href: '/admin/customers', label: 'Customers', icon: Users },
-  { href: '/admin/stores', label: 'Stores', icon: MapPin },
 ];
 
 export function AdminSidebar() {

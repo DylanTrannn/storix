@@ -17,6 +17,36 @@ export type OrderStatus = (typeof ORDER_STATUSES)[number];
 export const PAYMENT_METHODS = ['cash_on_delivery', 'bank_transfer'] as const;
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
 
+export const PAYMENT_STATUSES = [
+  'pending',
+  'awaiting_review',
+  'confirmed',
+  'rejected',
+  'not_required',
+] as const;
+export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
+
+/** NAPAS BIN codes for VietQR generation */
+export const BANK_BINS = {
+  VCB: '970436',
+  TCB: '970407',
+  BIDV: '970418',
+  VBA: '970405',
+  MB: '970422',
+  ACB: '970416',
+  VPB: '970432',
+  TPB: '970423',
+  STB: '970403',
+  HDB: '970437',
+  OCB: '970448',
+  SHB: '970443',
+  MSB: '970426',
+  SEA: '970440',
+  VIB: '970441',
+} as const;
+
+export type BankCode = keyof typeof BANK_BINS;
+
 export const SORT_DIRECTIONS = ['asc', 'desc'] as const;
 export type SortDirection = (typeof SORT_DIRECTIONS)[number];
 

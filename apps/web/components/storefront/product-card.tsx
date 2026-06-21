@@ -10,7 +10,8 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const image = product.images?.[0];
-  const minPrice = product.variants ? getProductMinPrice(product.variants) : null;
+  const minPrice =
+    product.minPrice ?? (product.variants ? getProductMinPrice(product.variants) : null);
 
   return (
     <Link href={`/products/${product.slug}`} className="group block cursor-pointer">

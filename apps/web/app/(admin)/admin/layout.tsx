@@ -3,6 +3,7 @@ import { Bell } from 'lucide-react';
 import { Button } from '@storix/ui/button';
 import { getCurrentUser } from '@/lib/api';
 import { AdminSidebar } from '@/components/admin/admin-sidebar';
+import { adminIconButtonClass } from '@/components/admin/admin-button-styles';
 import { ViewStorefrontButton } from '@/components/admin/view-storefront-button';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -24,7 +25,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="cursor-pointer rounded-full" aria-label="Notifications">
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`cursor-pointer rounded-full ${adminIconButtonClass}`}
+              aria-label="Notifications"
+            >
               <Bell className="h-4 w-4" />
             </Button>
             <ViewStorefrontButton />

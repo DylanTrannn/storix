@@ -46,16 +46,6 @@ export default async function HomePage() {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="cursor-pointer rounded-full border-stone-300 px-8"
-              >
-                <Link href="/stores" className="inline-flex items-center">
-                  Visit a store
-                </Link>
-              </Button>
             </div>
           </div>
 
@@ -137,8 +127,8 @@ export default async function HomePage() {
               <p className="mt-2 text-sm text-muted-foreground">Independent makers</p>
             </div>
             <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-              <p className="heading-display text-4xl text-primary">12</p>
-              <p className="mt-2 text-sm text-muted-foreground">Store locations</p>
+              <p className="heading-display text-4xl text-primary">100%</p>
+              <p className="mt-2 text-sm text-muted-foreground">Online shopping</p>
             </div>
             <div className="col-span-2 rounded-xl bg-accent p-8 text-accent-foreground shadow-lg">
               <p className="heading-display text-2xl">Premium, without pretense</p>

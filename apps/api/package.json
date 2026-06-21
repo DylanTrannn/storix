@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx --env-file=.env src/infrastructure/database/migrate.ts",
-    "db:seed": "tsx --env-file=.env src/infrastructure/database/seed.ts"
+    "db:seed": "tsx --env-file=.env src/infrastructure/database/seed.ts",
+    "import:whose-studio": "tsx --env-file=.env scripts/import-whose-studio.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1071.0",
@@ -32,6 +33,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "uuid": "^11.1.0",
+    "vietqr-ts": "^1.0.0",
     "zod": "^3.25.51"
   },
   "devDependencies": {

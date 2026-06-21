@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, asc, count, eq, sql } from 'drizzle-orm';
+import { and, asc, count, eq, ilike, or, sql } from 'drizzle-orm';
 import type {
+  CollectionListQuery,
   CreateCollectionInput,
   PaginatedResponse,
-  PaginationQuery,
   UpdateCollectionInput,
 } from '@storix/shared';
 import { DATABASE_CONNECTION, type Database } from '@/infrastructure/database/database.provider';
@@ -59,12 +59,29 @@ export class CollectionRepository implements ICollectionRepository {
     return this.toEntity(row, productCount);
   }
 
-  async list(query: PaginationQuery): Promise<PaginatedResponse<CollectionEntity>> {
-    const { page, limit } = query;
+  async list(query: CollectionListQuery): Promise<PaginatedResponse<CollectionEntity>> {
+    const { page, limit, search } = query;
     const offset = (page - 1) * limit;
+    const conditions = [];
+
+    if (search) {
+      const pattern = `%${search}%`;
+      conditions.push(
+        or(ilike(collections.name, pattern), ilike(collections.description, pattern)),
+      );
+    }
+
+    const where = conditions.length ? and(...conditions) : undefined;
+
     const [rows, countRow] = await Promise.all([
-      this.db.select().from(collections).orderBy(asc(collections.name)).limit(limit).offset(offset),
-      this.db.select({ count: count() }).from(collections),
+      this.db
+        .select()
+        .from(collections)
+        .where(where)
+        .orderBy(asc(collections.name))
+        .limit(limit)
+        .offset(offset),
+      this.db.select({ count: count() }).from(collections).where(where),
     ]);
     const total = countRow[0]?.count ?? 0;
     const data = await Promise.all(

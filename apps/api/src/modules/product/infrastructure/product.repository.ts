@@ -323,9 +323,9 @@ export class ProductRepository implements IProductRepository {
   async getImageById(
     productId: string,
     imageId: string,
-  ): Promise<{ storageKey: string } | null> {
+  ): Promise<{ storageKey: string; url: string } | null> {
     const [row] = await this.db
-      .select({ storageKey: productImages.storageKey })
+      .select({ storageKey: productImages.storageKey, url: productImages.url })
       .from(productImages)
       .where(and(eq(productImages.id, imageId), eq(productImages.productId, productId)))
       .limit(1);

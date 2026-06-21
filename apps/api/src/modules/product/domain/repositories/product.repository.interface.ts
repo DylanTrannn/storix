@@ -28,7 +28,7 @@ export interface IProductRepository {
   addImage(productId: string, data: CreateProductImageInput): Promise<ProductEntity | null>;
   addImages(productId: string, data: CreateProductImageInput[]): Promise<ProductEntity | null>;
   reorderImages(productId: string, imageIds: string[]): Promise<ProductEntity | null>;
-  getImageById(productId: string, imageId: string): Promise<{ storageKey: string } | null>;
+  getImageById(productId: string, imageId: string): Promise<{ storageKey: string; url: string } | null>;
   deleteImage(productId: string, imageId: string): Promise<ProductEntity | null>;
   slugExists(slug: string, excludeId?: string): Promise<boolean>;
 }

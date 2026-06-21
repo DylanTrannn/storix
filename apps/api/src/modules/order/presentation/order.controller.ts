@@ -12,11 +12,13 @@ import {
 import { ApiBearerAuth, ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   CheckoutSchema,
+  ConfirmOrderPaymentSchema,
   PaginationQuerySchema,
   UpdateOrderStatusSchema,
 } from '@storix/shared';
 import type {
   CheckoutInput,
+  ConfirmOrderPaymentInput,
   PaginationQuery,
   UpdateOrderStatusInput,
 } from '@storix/shared';
@@ -68,11 +70,37 @@ export class OrderController {
     return this.orderService.getMyOrders(user.sub, query);
   }
 
+  @Get(':id/payment-instructions')
+  @UseGuards(OptionalJwtAuthGuard)
+  @ApiOperation({ summary: 'Get bank transfer payment instructions for an order' })
+  getPaymentInstructions(@Param('id') id: string, @CurrentUser() user?: JwtPayload) {
+    return this.orderService.getPaymentInstructions(id, user?.sub, user?.role);
+  }
+
+  @Post(':id/mark-paid')
+  @UseGuards(OptionalJwtAuthGuard)
+  @ApiOperation({ summary: 'Customer marks bank transfer as submitted' })
+  markPaymentSubmitted(@Param('id') id: string, @CurrentUser() user?: JwtPayload) {
+    return this.orderService.markPaymentSubmitted(id, user?.sub, user?.role);
+  }
+
   @Get(':id')
   @UseGuards(OptionalJwtAuthGuard)
   @ApiOperation({ summary: 'Get order by id' })
   getById(@Param('id') id: string, @CurrentUser() user?: JwtPayload) {
-    return this.orderService.getById(id, user?.sub);
+    return this.orderService.getById(id, user?.sub, user?.role);
+  }
+
+  @Patch(':id/payment')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Confirm or reject bank transfer payment (admin)' })
+  confirmPayment(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(ConfirmOrderPaymentSchema)) body: ConfirmOrderPaymentInput,
+  ) {
+    return this.orderService.confirmPayment(id, body);
   }
 
   @Patch(':id/status')

@@ -5,10 +5,16 @@ import { Badge } from '@storix/ui/badge';
 import { Separator } from '@storix/ui/separator';
 import { getAdminOrder } from '@/lib/api';
 import { formatPrice } from '@/lib/utils';
+import { formatVnShippingAddress } from '@storix/shared';
 import { TableSkeleton } from '@/components/skeletons';
 
 const OrderStatusForm = dynamic(
   () => import('@/components/admin/order-status-form').then((m) => m.OrderStatusForm),
+  { loading: () => <TableSkeleton rows={2} /> },
+);
+
+const PaymentConfirmForm = dynamic(
+  () => import('@/components/admin/payment-confirm-form').then((m) => m.PaymentConfirmForm),
   { loading: () => <TableSkeleton rows={2} /> },
 );
 
@@ -29,12 +35,19 @@ async function OrderDetail({ id }: { id: string }) {
       <div className="lg:col-span-2 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold">Order #{order.id.slice(0, 8)}</h1>
+            <h1 className="text-2xl font-semibold">Order #{order.orderNumber}</h1>
             <p className="text-sm text-muted-foreground">
               {new Date(order.createdAt).toLocaleString()}
             </p>
           </div>
-          <Badge className="capitalize">{order.status}</Badge>
+          <div className="flex flex-col items-end gap-1">
+            <Badge className="capitalize">{order.status}</Badge>
+            {order.paymentMethod === 'bank_transfer' && (
+              <Badge variant="outline" className="capitalize">
+                {order.paymentStatus.replace('_', ' ')}
+              </Badge>
+            )}
+          </div>
         </div>
 
         <Separator />
@@ -58,15 +71,29 @@ async function OrderDetail({ id }: { id: string }) {
       </div>
 
       <div className="space-y-6">
+        {order.paymentMethod === 'bank_transfer' && (
+          <PaymentConfirmForm
+            orderId={order.id}
+            paymentStatus={order.paymentStatus}
+            transferReference={order.transferReference}
+            customerMarkedPaidAt={order.customerMarkedPaidAt}
+          />
+        )}
         <OrderStatusForm orderId={order.id} currentStatus={order.status} />
         <div className="rounded-lg border p-4 text-sm">
-          <h2 className="font-medium">Shipping</h2>
-          <p className="mt-2 text-muted-foreground">
-            {order.shippingAddress.line1}
-            <br />
-            {order.shippingAddress.city}, {order.shippingAddress.state}{' '}
-            {order.shippingAddress.postalCode}
+          <h2 className="font-medium">Giao hàng</h2>
+          {order.shippingAddress.recipientName && (
+            <p className="mt-2 font-medium">{order.shippingAddress.recipientName}</p>
+          )}
+          {order.shippingAddress.phone && (
+            <p className="text-muted-foreground">{order.shippingAddress.phone}</p>
+          )}
+          <p className="mt-1 text-muted-foreground">
+            {formatVnShippingAddress(order.shippingAddress)}
           </p>
+          {order.guestEmail && (
+            <p className="mt-2 text-muted-foreground">Email: {order.guestEmail}</p>
+          )}
         </div>
       </div>
     </div>

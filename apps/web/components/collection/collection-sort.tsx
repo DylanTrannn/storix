@@ -19,6 +19,7 @@ export function CollectionSort() {
     const params = new URLSearchParams(searchParams.toString());
     params.set('sort', value);
     params.set('direction', value === 'name' ? 'asc' : 'desc');
+    params.delete('page');
     router.push(`?${params.toString()}`);
   }
 

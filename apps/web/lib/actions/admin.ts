@@ -6,18 +6,19 @@ import type {
   CreateCollectionInput,
   CreateProductImageInput,
   CreateProductInput,
-  CreateStoreLocationInput,
+  CreateProductVariantInput,
   OrderStatus,
   PresignUploadInput,
   ReorderProductImagesInput,
   UpdateCollectionInput,
   UpdateProductInput,
+  UpdateProductVariantInput,
 } from '@storix/shared';
-import { getAccessToken } from '@/lib/auth/cookies';
+import { getValidAccessToken } from '@/lib/auth/session';
 import { getServerClient } from '@/lib/api/client';
 
 async function getAuthedClient() {
-  const token = await getAccessToken();
+  const token = await getValidAccessToken();
   if (!token) {
     throw new Error('Unauthorized');
   }
@@ -31,11 +32,46 @@ export async function createProductAction(data: CreateProductInput) {
   return product;
 }
 
+export async function getAdminProductAction(id: string) {
+  const client = await getAuthedClient();
+  return client.getProduct(id);
+}
+
 export async function updateProductAction(id: string, data: UpdateProductInput) {
   const client = await getAuthedClient();
-  await client.updateProduct(id, data);
+  const product = await client.updateProduct(id, data);
   revalidatePath('/admin/products');
-  revalidatePath(`/admin/products/${id}`);
+  revalidatePath(`/products/${product.slug}`);
+  return product;
+}
+
+export async function createProductVariantAction(
+  productId: string,
+  data: CreateProductVariantInput,
+) {
+  const client = await getAuthedClient();
+  const product = await client.createProductVariant(productId, data);
+  revalidatePath('/admin/products');
+  revalidatePath(`/products/${product.slug}`);
+  return product;
+}
+
+export async function updateProductVariantAction(
+  productId: string,
+  variantId: string,
+  data: UpdateProductVariantInput,
+) {
+  const client = await getAuthedClient();
+  const product = await client.updateProductVariant(productId, variantId, data);
+  revalidatePath('/admin/products');
+  revalidatePath(`/products/${product.slug}`);
+  return product;
+}
+
+export async function deleteProductAction(id: string) {
+  const client = await getAuthedClient();
+  await client.deleteProduct(id);
+  revalidatePath('/admin/products');
 }
 
 export async function presignUploadAction(data: PresignUploadInput) {
@@ -92,16 +128,18 @@ export async function updateCollectionAction(id: string, data: UpdateCollectionI
   revalidatePath(`/admin/collections/${id}`);
 }
 
-export async function createStoreLocationAction(data: CreateStoreLocationInput) {
-  const client = await getAuthedClient();
-  await client.createStoreLocation(data);
-  revalidatePath('/admin/stores');
-  revalidatePath('/stores');
-}
-
 export async function updateOrderStatusAction(orderId: string, status: OrderStatus) {
   const client = await getAuthedClient();
   await client.updateOrderStatus(orderId, { status });
   revalidatePath('/admin/orders');
   revalidatePath(`/admin/orders/${orderId}`);
+}
+
+export async function confirmOrderPaymentAction(orderId: string, confirmed: boolean) {
+  const client = await getAuthedClient();
+  await client.confirmOrderPayment(orderId, { confirmed });
+  revalidatePath('/admin/orders');
+  revalidatePath(`/admin/orders/${orderId}`);
+  revalidatePath(`/orders/${orderId}`);
+  revalidatePath(`/orders/${orderId}/pay`);
 }

@@ -44,6 +44,7 @@ export const ProductPublicSchema = ProductSchema.extend({
       }),
     )
     .optional(),
+  minPrice: z.number().int().positive().optional().nullable(),
 });
 
 export const ProductDetailSchema = ProductSchema.extend({
@@ -51,9 +52,15 @@ export const ProductDetailSchema = ProductSchema.extend({
   variants: z.array(ProductVariantSchema),
 });
 
+/** Empty slug → undefined so API can auto-generate from name */
+const optionalSlug = z.preprocess(
+  (value) => (typeof value === 'string' && value.trim() === '' ? undefined : value),
+  z.string().min(1).optional(),
+);
+
 export const CreateProductSchema = z.object({
   name: z.string().min(1),
-  slug: z.string().min(1).optional(),
+  slug: optionalSlug,
   description: z.string().optional(),
   status: z.enum(PRODUCT_STATUSES).optional(),
   metaTitle: z.string().optional(),

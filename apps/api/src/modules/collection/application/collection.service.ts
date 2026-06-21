@@ -1,11 +1,12 @@
 import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import type {
+  CollectionListQuery,
   CreateCollectionInput,
   PaginatedResponse,
-  PaginationQuery,
   ProductListQuery,
   UpdateCollectionInput,
 } from '@storix/shared';
+import { StorageService } from '@/infrastructure/storage/storage.service';
 import { slugify } from '@/shared/utils/slugify';
 import { ProductService } from '../../product/application/product.service';
 import type { CollectionEntity } from '../domain/entities/collection.entity';
@@ -17,9 +18,10 @@ export class CollectionService {
   constructor(
     @Inject(COLLECTION_REPOSITORY) private readonly collectionRepository: ICollectionRepository,
     private readonly productService: ProductService,
+    private readonly storageService: StorageService,
   ) {}
 
-  async list(query: PaginationQuery): Promise<PaginatedResponse<ReturnType<CollectionEntity['toDetail']>>> {
+  async list(query: CollectionListQuery): Promise<PaginatedResponse<ReturnType<CollectionEntity['toDetail']>>> {
     const result = await this.collectionRepository.list(query);
     return {
       data: result.data.map((c) => c.toDetail()),
@@ -86,6 +88,13 @@ export class CollectionService {
   }
 
   async delete(id: string) {
+    const collection = await this.collectionRepository.findById(id);
+    if (!collection) {
+      throw new NotFoundException('Collection not found');
+    }
+
+    await this.storageService.deleteStoredObject(null, collection.imageUrl);
+
     const deleted = await this.collectionRepository.delete(id);
     if (!deleted) {
       throw new NotFoundException('Collection not found');

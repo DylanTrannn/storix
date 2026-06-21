@@ -30,6 +30,8 @@ export class StorageService {
         region: 'auto',
         endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
         credentials: { accessKeyId, secretAccessKey },
+        requestChecksumCalculation: 'WHEN_REQUIRED',
+        responseChecksumValidation: 'WHEN_REQUIRED',
       });
     } else {
       this.client = null;
@@ -54,6 +56,26 @@ export class StorageService {
 
   getPublicUrl(storageKey: string): string {
     return `${this.publicUrl}/${storageKey}`;
+  }
+
+  resolveStorageKey(storageKey?: string | null, url?: string | null): string | null {
+    const key = storageKey?.trim();
+    if (key) return key;
+
+    if (!url || !this.publicUrl) return null;
+
+    const prefix = `${this.publicUrl}/`;
+    if (!url.startsWith(prefix)) return null;
+
+    const resolved = url.slice(prefix.length);
+    return resolved || null;
+  }
+
+  async deleteStoredObject(storageKey?: string | null, url?: string | null): Promise<void> {
+    const key = this.resolveStorageKey(storageKey, url);
+    if (!key) return;
+
+    await this.deleteObject(key).catch(() => undefined);
   }
 
   async presignUpload(input: {

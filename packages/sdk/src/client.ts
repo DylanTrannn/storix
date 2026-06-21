@@ -10,10 +10,11 @@ import type {
   CreateProductImageInput,
   CreateProductInput,
   CreateProductVariantInput,
-  CreateStoreLocationInput,
+  ConfirmOrderPaymentInput,
   LoginInput,
   Order,
   OrderDetail,
+  OrderPaymentInstructions,
   PaginatedResponse,
   PresignUploadInput,
   PresignUploadResponse,
@@ -22,14 +23,12 @@ import type {
   ProductListQuery,
   RegisterInput,
   ReorderProductImagesInput,
-  StoreLocation,
   UpdateCartItemInput,
   UpdateCollectionInput,
   UpdateOrderStatusInput,
   UpdateProductInput,
   UpdateProductVariantInput,
   UpdateProfileInput,
-  UpdateStoreLocationInput,
   User,
   WishlistItem,
 } from '@storix/shared';
@@ -142,7 +141,13 @@ export function createStorixClient(config: StorixClientConfig) {
     listProducts: (query?: Partial<ProductListQuery>) =>
       request<PaginatedResponse<Product>>('/products', { params: query }),
 
+    listAdminProducts: (query?: Partial<ProductListQuery>) =>
+      request<PaginatedResponse<Product>>('/products/admin/list', { params: query }),
+
     getProductBySlug: (slug: string) => request<ProductDetail>(`/products/${slug}`),
+
+    previewProductBySlug: (slug: string) =>
+      request<ProductDetail>(`/products/preview/${slug}`),
 
     getProduct: (id: string) => request<ProductDetail>(`/products/detail/${id}`),
 
@@ -189,7 +194,7 @@ export function createStorixClient(config: StorixClientConfig) {
       request<PresignUploadResponse>('/uploads/presign', { method: 'POST', body: data }),
 
     // Collections
-    listCollections: (query?: { page?: number; limit?: number }) =>
+    listCollections: (query?: { page?: number; limit?: number; search?: string }) =>
       request<PaginatedResponse<Collection>>('/collections', { params: query }),
 
     getCollectionBySlug: (slug: string, query?: { page?: number; limit?: number; sort?: string; direction?: string }) =>
@@ -198,7 +203,7 @@ export function createStorixClient(config: StorixClientConfig) {
         { params: query },
       ),
 
-    getCollection: (id: string) => request<CollectionDetail>(`/collections/${id}`),
+    getCollection: (id: string) => request<CollectionDetail>(`/collections/detail/${id}`),
 
     createCollection: (data: CreateCollectionInput) =>
       request<Collection>('/collections', { method: 'POST', body: data }),
@@ -235,6 +240,15 @@ export function createStorixClient(config: StorixClientConfig) {
 
     getOrder: (id: string) => request<OrderDetail>(`/orders/${id}`),
 
+    getOrderPaymentInstructions: (id: string) =>
+      request<OrderPaymentInstructions>(`/orders/${id}/payment-instructions`),
+
+    markOrderPaid: (id: string) =>
+      request<OrderDetail>(`/orders/${id}/mark-paid`, { method: 'POST' }),
+
+    confirmOrderPayment: (id: string, data: ConfirmOrderPaymentInput) =>
+      request<OrderDetail>(`/orders/${id}/payment`, { method: 'PATCH', body: data }),
+
     updateOrderStatus: (id: string, data: UpdateOrderStatusInput) =>
       request<OrderDetail>(`/orders/${id}/status`, { method: 'PATCH', body: data }),
 
@@ -255,20 +269,6 @@ export function createStorixClient(config: StorixClientConfig) {
 
     removeFromWishlist: (productId: string) =>
       request<void>(`/wishlist/${productId}`, { method: 'DELETE' }),
-
-    // Store locations
-    listStoreLocations: () => request<StoreLocation[]>('/store-locations'),
-
-    getStoreLocation: (id: string) => request<StoreLocation>(`/store-locations/${id}`),
-
-    createStoreLocation: (data: CreateStoreLocationInput) =>
-      request<StoreLocation>('/store-locations', { method: 'POST', body: data }),
-
-    updateStoreLocation: (id: string, data: UpdateStoreLocationInput) =>
-      request<StoreLocation>(`/store-locations/${id}`, { method: 'PATCH', body: data }),
-
-    deleteStoreLocation: (id: string) =>
-      request<void>(`/store-locations/${id}`, { method: 'DELETE' }),
 
     // Admin dashboard stats
     getDashboardStats: () =>

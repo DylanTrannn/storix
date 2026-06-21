@@ -36,12 +36,16 @@ export class ProductService {
     };
   }
 
-  async getBySlug(slug: string) {
-    const product = await this.productRepository.findBySlug(slug, true);
+  async getBySlug(slug: string, activeOnly = true) {
+    const product = await this.productRepository.findBySlug(slug, activeOnly);
     if (!product) {
       throw new NotFoundException('Product not found');
     }
     return product.toDetail();
+  }
+
+  previewBySlug(slug: string) {
+    return this.getBySlug(slug, false);
   }
 
   async getById(id: string) {
@@ -79,9 +83,7 @@ export class ProductService {
     }
 
     for (const image of product.images) {
-      if (image.storageKey) {
-        await this.storageService.deleteObject(image.storageKey).catch(() => undefined);
-      }
+      await this.storageService.deleteStoredObject(image.storageKey, image.url);
     }
 
     const deleted = await this.productRepository.delete(id);
@@ -144,9 +146,7 @@ export class ProductService {
       throw new NotFoundException('Product or image not found');
     }
 
-    if (image.storageKey) {
-      await this.storageService.deleteObject(image.storageKey).catch(() => undefined);
-    }
+    await this.storageService.deleteStoredObject(image.storageKey, image.url);
 
     const product = await this.productRepository.deleteImage(productId, imageId);
     if (!product) {

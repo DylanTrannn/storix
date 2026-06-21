@@ -2,11 +2,15 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { getCollectionBySlug } from '@/lib/api';
+import { buildQueryHref } from '@/lib/storefront-pagination';
 import { ProductGrid } from '@/components/storefront/product-card';
+import { StorefrontPagination } from '@/components/storefront/pagination';
 import { CollectionSort } from '@/components/collection/collection-sort';
 import { ProductGridSkeleton } from '@/components/skeletons';
 
 export const revalidate = 60;
+
+const PRODUCTS_PER_PAGE = 20;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -50,10 +54,22 @@ async function CollectionContent({
 }) {
   let data;
   try {
-    data = await getCollectionBySlug(slug, { page, limit: 20, sort, direction });
+    data = await getCollectionBySlug(slug, {
+      page,
+      limit: PRODUCTS_PER_PAGE,
+      sort,
+      direction,
+    });
   } catch {
     notFound();
   }
+
+  if (page > data.products.meta.totalPages && data.products.meta.totalPages > 0) {
+    notFound();
+  }
+
+  const pathname = `/collections/${slug}`;
+  const queryParams = { sort, direction, page };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -64,17 +80,22 @@ async function CollectionContent({
           {data.description && (
             <p className="mt-3 max-w-2xl text-muted-foreground">{data.description}</p>
           )}
+          {data.productCount != null && data.productCount > 0 && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {data.productCount} product{data.productCount === 1 ? '' : 's'}
+            </p>
+          )}
         </div>
         <Suspense fallback={null}>
           <CollectionSort />
         </Suspense>
       </div>
       <ProductGrid products={data.products.data} />
-      {data.products.meta.totalPages > 1 && (
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          Page {data.products.meta.page} of {data.products.meta.totalPages}
-        </p>
-      )}
+      <StorefrontPagination
+        page={data.products.meta.page}
+        totalPages={data.products.meta.totalPages}
+        buildHref={(nextPage) => buildQueryHref(pathname, queryParams, { page: nextPage })}
+      />
     </div>
   );
 }
@@ -82,7 +103,7 @@ async function CollectionContent({
 export default async function CollectionPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
   const { page: pageParam, sort, direction } = await searchParams;
-  const page = Number(pageParam) || 1;
+  const page = Math.max(1, Number(pageParam) || 1);
 
   return (
     <Suspense fallback={

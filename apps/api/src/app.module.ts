@@ -9,7 +9,6 @@ import { CollectionModule } from './modules/collection/collection.module';
 import { HealthModule } from './modules/health/health.module';
 import { OrderModule } from './modules/order/order.module';
 import { ProductModule } from './modules/product/product.module';
-import { StoreLocationModule } from './modules/store-location/store-location.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { UserModule } from './modules/user/user.module';
 import { WishlistModule } from './modules/wishlist/wishlist.module';
@@ -27,7 +26,6 @@ import { WishlistModule } from './modules/wishlist/wishlist.module';
     CartModule,
     OrderModule,
     WishlistModule,
-    StoreLocationModule,
     UploadModule,
     HealthModule,
   ],

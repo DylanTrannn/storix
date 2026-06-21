@@ -15,6 +15,20 @@
       "when": 1781704285000,
       "tag": "0001_product_taxonomy_r2",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781704286000,
+      "tag": "0002_order_payment",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1781704287000,
+      "tag": "0003_drop_store_locations",
+      "breakpoints": true
     }
   ]
 }

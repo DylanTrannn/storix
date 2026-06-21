@@ -46,6 +46,11 @@ export class ProductEntity {
     return [...this.images].sort((a, b) => a.sortOrder - b.sortOrder)[0] ?? null;
   }
 
+  getMinPrice(): number | null {
+    if (!this.variants.length) return null;
+    return Math.min(...this.variants.map((v) => v.price));
+  }
+
   toPublic() {
     const primary = this.getPrimaryImage();
     return {
@@ -59,6 +64,7 @@ export class ProductEntity {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       images: primary ? [{ url: primary.url, alt: primary.alt }] : [],
+      minPrice: this.getMinPrice(),
     };
   }
 

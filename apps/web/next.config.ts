@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
       { protocol: 'https', hostname: 'plus.unsplash.com', pathname: '/**' },
+      { protocol: 'https', hostname: 'img.vietqr.io', pathname: '/**' },
       { protocol: 'http', hostname: 'localhost', pathname: '/**' },
       ...(r2Hostname
         ? [{ protocol: 'https' as const, hostname: r2Hostname, pathname: '/**' }]

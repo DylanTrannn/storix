@@ -14,6 +14,10 @@ export const ProductListQuerySchema = PaginationQuerySchema.extend({
   search: z.string().optional(),
 });
 
+export const CollectionListQuerySchema = PaginationQuerySchema.extend({
+  search: z.string().optional(),
+});
+
 export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
   z.object({
     data: z.array(itemSchema),
@@ -27,6 +31,7 @@ export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =
 
 export type PaginationQuery = z.infer<typeof PaginationQuerySchema>;
 export type ProductListQuery = z.infer<typeof ProductListQuerySchema>;
+export type CollectionListQuery = z.infer<typeof CollectionListQuerySchema>;
 
 export type PaginatedResponse<T> = {
   data: T[];

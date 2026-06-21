@@ -6,7 +6,9 @@ import { X } from 'lucide-react';
 import { Button } from '@storix/ui/button';
 
 interface AdminFormDialogProps {
-  triggerLabel: string;
+  triggerLabel?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   title: string;
   description?: string;
   children: (props: { onSuccess: () => void; onCancel: () => void }) => ReactNode;
@@ -14,12 +16,16 @@ interface AdminFormDialogProps {
 
 export function AdminFormDialog({
   triggerLabel,
+  open: controlledOpen,
+  onOpenChange,
   title,
   description,
   children,
 }: AdminFormDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
   const titleId = useId();
   const descriptionId = useId();
 
@@ -27,7 +33,18 @@ export function AdminFormDialog({
     setMounted(true);
   }, []);
 
-  const close = useCallback(() => setOpen(false), []);
+  const setOpen = useCallback(
+    (next: boolean) => {
+      if (isControlled) {
+        onOpenChange?.(next);
+      } else {
+        setInternalOpen(next);
+      }
+    },
+    [isControlled, onOpenChange],
+  );
+
+  const close = useCallback(() => setOpen(false), [setOpen]);
 
   useEffect(() => {
     if (!open) return;
@@ -92,9 +109,11 @@ export function AdminFormDialog({
 
   return (
     <>
-      <Button type="button" className="rounded-full" onClick={() => setOpen(true)}>
-        {triggerLabel}
-      </Button>
+      {triggerLabel && !isControlled && (
+        <Button type="button" className="rounded-full" onClick={() => setOpen(true)}>
+          {triggerLabel}
+        </Button>
+      )}
       {modal}
     </>
   );

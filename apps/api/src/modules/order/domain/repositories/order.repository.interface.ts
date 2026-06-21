@@ -3,6 +3,8 @@ import type {
   OrderStatus,
   PaginatedResponse,
   PaginationQuery,
+  PaymentStatus,
+  ShippingAddress,
 } from '@storix/shared';
 import type { OrderEntity } from '../entities/order.entity';
 
@@ -12,7 +14,9 @@ export interface CreateOrderData {
   userId?: string;
   guestEmail: string;
   paymentMethod: CheckoutInput['paymentMethod'];
-  shippingAddress: CheckoutInput['shippingAddress'];
+  paymentStatus: PaymentStatus;
+  transferReference?: string;
+  shippingAddress: ShippingAddress;
   notes?: string;
   subtotal: number;
   total: number;
@@ -31,4 +35,7 @@ export interface IOrderRepository {
   list(query: PaginationQuery): Promise<PaginatedResponse<OrderEntity>>;
   create(data: CreateOrderData): Promise<OrderEntity>;
   updateStatus(id: string, status: OrderStatus): Promise<OrderEntity | null>;
+  markPaymentSubmitted(id: string): Promise<OrderEntity | null>;
+  confirmPayment(id: string, confirmed: boolean): Promise<OrderEntity | null>;
+  updateTransferReference(id: string, transferReference: string): Promise<OrderEntity | null>;
 }

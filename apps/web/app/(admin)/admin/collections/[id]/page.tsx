@@ -1,13 +1,8 @@
 import { notFound } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
+import { CollectionForm } from '@/components/admin/collection-form';
 import { getAdminCollection } from '@/lib/api';
 import { TableSkeleton } from '@/components/skeletons';
-
-const CollectionForm = dynamic(
-  () => import('@/components/admin/collection-form').then((m) => m.CollectionForm),
-  { loading: () => <TableSkeleton rows={5} /> },
-);
 
 interface PageProps {
   params: Promise<{ id: string }>;

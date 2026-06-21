@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const PresignUploadSchema = z.object({
   filename: z.string().min(1),
   contentType: z.string().min(1),
-  context: z.enum(['product']).default('product'),
+  context: z.enum(['product', 'collection']).default('product'),
 });
 
 export const PresignUploadResponseSchema = z.object({

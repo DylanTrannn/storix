@@ -12,6 +12,7 @@ import {
   presignUploadAction,
   reorderProductImagesAction,
 } from '@/lib/actions/admin';
+import { uploadFileToPresignedUrl } from '@/lib/storage/r2-browser-upload';
 
 export interface ProductImageItem {
   id?: string;
@@ -200,16 +201,16 @@ export async function uploadPendingImagesForProduct(
   async function uploadFile(file: File) {
     const presign = await presignUploadAction({
       filename: file.name,
-      contentType: file.type,
+      contentType: file.type || 'application/octet-stream',
       context: 'product',
     });
-    const response = await fetch(presign.uploadUrl, {
-      method: 'PUT',
-      body: file,
-      headers: { 'Content-Type': file.type },
+
+    return uploadFileToPresignedUrl({
+      uploadUrl: presign.uploadUrl,
+      publicUrl: presign.publicUrl,
+      storageKey: presign.storageKey,
+      file,
     });
-    if (!response.ok) throw new Error('Upload failed');
-    return { url: presign.publicUrl, storageKey: presign.storageKey };
   }
 
   const uploaded: ProductImageItem[] = [];
@@ -218,6 +219,7 @@ export async function uploadPendingImagesForProduct(
       uploaded.push(img);
       continue;
     }
+
     const { url, storageKey } = await uploadFile(img.file);
     if (img.previewUrl) URL.revokeObjectURL(img.previewUrl);
     uploaded.push({ ...img, url, storageKey, file: undefined, previewUrl: undefined });

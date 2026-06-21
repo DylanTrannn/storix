@@ -10,6 +10,7 @@ import {
   uniqueIndex,
   index,
   pgEnum,
+  serial,
 } from 'drizzle-orm/pg-core';
 
 export const userRoleEnum = pgEnum('user_role', ['admin', 'customer']);
@@ -23,6 +24,13 @@ export const orderStatusEnum = pgEnum('order_status', [
   'cancelled',
 ]);
 export const paymentMethodEnum = pgEnum('payment_method', ['cash_on_delivery', 'bank_transfer']);
+export const paymentStatusEnum = pgEnum('payment_status', [
+  'pending',
+  'awaiting_review',
+  'confirmed',
+  'rejected',
+  'not_required',
+]);
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -179,18 +187,25 @@ export const orders = pgTable(
   'orders',
   {
     id: uuid('id').primaryKey().defaultRandom(),
+    orderNumber: serial('order_number').notNull().unique(),
     userId: uuid('user_id').references(() => users.id, { onDelete: 'set null' }),
     guestEmail: varchar('guest_email', { length: 255 }),
     status: orderStatusEnum('status').notNull().default('pending'),
+    paymentStatus: paymentStatusEnum('payment_status').notNull().default('pending'),
     paymentMethod: paymentMethodEnum('payment_method').notNull(),
+    transferReference: varchar('transfer_reference', { length: 100 }),
+    customerMarkedPaidAt: timestamp('customer_marked_paid_at', { withTimezone: true }),
+    paymentConfirmedAt: timestamp('payment_confirmed_at', { withTimezone: true }),
     shippingAddress: jsonb('shipping_address')
       .$type<{
         line1: string;
         line2?: string | null;
         city: string;
-        state: string;
-        postalCode: string;
+        state?: string | null;
+        postalCode?: string | null;
         country: string;
+        phone?: string | null;
+        recipientName?: string | null;
       }>()
       .notNull(),
     notes: text('notes'),
@@ -202,6 +217,7 @@ export const orders = pgTable(
   (table) => [
     index('orders_user_id_idx').on(table.userId),
     index('orders_status_idx').on(table.status),
+    index('orders_payment_status_idx').on(table.paymentStatus),
   ],
 );
 
@@ -239,17 +255,6 @@ export const wishlistItems = pgTable(
     uniqueIndex('wishlist_items_user_product_unique_idx').on(table.userId, table.productId),
   ],
 );
-
-export const storeLocations = pgTable('store_locations', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  name: varchar('name', { length: 255 }).notNull(),
-  address: text('address').notNull(),
-  phone: varchar('phone', { length: 50 }),
-  mapUrl: text('map_url'),
-  hours: text('hours'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
-});
 
 export const taxonomyCategories = pgTable(
   'taxonomy_categories',

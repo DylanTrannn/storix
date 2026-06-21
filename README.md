@@ -41,6 +41,22 @@ pnpm generate:sdk # Regenerate API client from OpenAPI
 
 Configure Cloudflare R2 in `apps/api/.env` for product image uploads (see `apps/api/.env.example`).
 
+### Bank transfer (VietQR)
+
+Set these in `apps/api/.env` to enable bank transfer checkout:
+
+```env
+STORE_NAME=STORIX
+STORE_CURRENCY=VND
+BANK_BIN=970436
+BANK_NAME=Vietcombank
+BANK_ACCOUNT_NUMBER=your-account-number
+BANK_ACCOUNT_HOLDER=YOUR COMPANY NAME
+APP_URL=http://localhost:3000
+```
+
+Set `NEXT_PUBLIC_STORE_CURRENCY=VND` in `apps/web/.env.local` so prices display correctly. Product prices should be stored as whole VND amounts when using VND.
+
 ## Project Structure
 
 ```txt

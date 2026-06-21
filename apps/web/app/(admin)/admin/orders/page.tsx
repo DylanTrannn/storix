@@ -16,7 +16,10 @@ async function OrdersList() {
     <OrdersTable
       orders={response.data.map((o) => ({
         id: o.id,
+        orderNumber: o.orderNumber,
         status: o.status,
+        paymentStatus: o.paymentStatus,
+        paymentMethod: o.paymentMethod,
         total: formatPrice(o.total),
         createdAt: new Date(o.createdAt).toLocaleDateString(),
       }))}

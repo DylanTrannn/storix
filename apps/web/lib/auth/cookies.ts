@@ -1,7 +1,11 @@
 import { cookies } from 'next/headers';
-
-const ACCESS_TOKEN_COOKIE = process.env.ACCESS_TOKEN_COOKIE ?? 'storix_access_token';
-const REFRESH_TOKEN_COOKIE = process.env.REFRESH_TOKEN_COOKIE ?? 'storix_refresh_token';
+import { applyAuthCookies, clearAuthCookieValues } from './cookie-options';
+import {
+  ACCESS_TOKEN_COOKIE,
+  ACCESS_TOKEN_MAX_AGE,
+  REFRESH_TOKEN_COOKIE,
+  REFRESH_TOKEN_MAX_AGE,
+} from './constants';
 
 export async function getAccessToken(): Promise<string | undefined> {
   const cookieStore = await cookies();
@@ -15,29 +19,17 @@ export async function getRefreshToken(): Promise<string | undefined> {
 
 export async function setAuthCookies(accessToken: string, refreshToken: string) {
   const cookieStore = await cookies();
-  const isProduction = process.env.NODE_ENV === 'production';
-
-  cookieStore.set(ACCESS_TOKEN_COOKIE, accessToken, {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 15,
-  });
-
-  cookieStore.set(REFRESH_TOKEN_COOKIE, refreshToken, {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 24 * 7,
-  });
+  applyAuthCookies(cookieStore, accessToken, refreshToken);
 }
 
 export async function clearAuthCookies() {
   const cookieStore = await cookies();
-  cookieStore.delete(ACCESS_TOKEN_COOKIE);
-  cookieStore.delete(REFRESH_TOKEN_COOKIE);
+  clearAuthCookieValues(cookieStore);
 }
 
-export { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE };
+export {
+  ACCESS_TOKEN_COOKIE,
+  REFRESH_TOKEN_COOKIE,
+  ACCESS_TOKEN_MAX_AGE,
+  REFRESH_TOKEN_MAX_AGE,
+};

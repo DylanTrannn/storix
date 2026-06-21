@@ -47,6 +47,15 @@ export class ProductController {
     return this.productService.list({ ...query, status: query.status ?? 'active' });
   }
 
+  @Get('admin/list')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'List all products for admin (includes drafts)' })
+  listAdmin(@Query(new ZodValidationPipe(ProductListQuerySchema)) query: ProductListQuery) {
+    return this.productService.list(query);
+  }
+
   @Get('detail/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
@@ -54,6 +63,15 @@ export class ProductController {
   @ApiOperation({ summary: 'Get product by id (admin)' })
   getById(@Param('id') id: string) {
     return this.productService.getById(id);
+  }
+
+  @Get('preview/:slug')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Preview product by slug (admin, any status)' })
+  previewBySlug(@Param('slug') slug: string) {
+    return this.productService.previewBySlug(slug);
   }
 
   @Get(':slug')

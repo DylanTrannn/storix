@@ -286,16 +286,6 @@ Features:
 
 ---
 
-### Store Locations
-
-Features:
-
-- List all stores
-- Store information
-- Map link
-
----
-
 # Admin Panel
 
 ## Product Management
@@ -432,4 +422,4 @@ Phase 5:
 
 Generate code incrementally and keep architecture clean and maintainable.
 
-Remember to generate the complete domain model and database schema (Product, ProductVariant, Collection, Cart, Order, OrderItem, User, Address, Wishlist, StoreLocation)
+Remember to generate the complete domain model and database schema (Product, ProductVariant, Collection, Cart, Order, OrderItem, User, Address, Wishlist)

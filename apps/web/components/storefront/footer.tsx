@@ -1,20 +1,25 @@
 import Link from 'next/link';
 import { Instagram, Mail } from 'lucide-react';
+import type { Collection } from '@storix/shared';
 
-const footerLinks = {
-  shop: [
+const companyLinks = [
+  { href: '/account', label: 'My account' },
+  { href: '/admin', label: 'Merchant login' },
+];
+
+interface StorefrontFooterProps {
+  collections: Collection[];
+}
+
+export function StorefrontFooter({ collections }: StorefrontFooterProps) {
+  const shopLinks = [
     { href: '/collections/all', label: 'All products' },
-    { href: '/collections/new-arrivals', label: 'New arrivals' },
-    { href: '/collections/essentials', label: 'Essentials' },
-  ],
-  company: [
-    { href: '/stores', label: 'Store locations' },
-    { href: '/account', label: 'My account' },
-    { href: '/admin', label: 'Merchant login' },
-  ],
-};
+    ...collections.map((collection) => ({
+      href: `/collections/${collection.slug}`,
+      label: collection.name,
+    })),
+  ];
 
-export function StorefrontFooter() {
   return (
     <footer className="border-t border-stone-800 bg-accent text-accent-foreground">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -46,7 +51,7 @@ export function StorefrontFooter() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">Shop</p>
             <ul className="mt-4 space-y-3">
-              {footerLinks.shop.map((link) => (
+              {shopLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -62,7 +67,7 @@ export function StorefrontFooter() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">Company</p>
             <ul className="mt-4 space-y-3">
-              {footerLinks.company.map((link) => (
+              {companyLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -80,7 +85,7 @@ export function StorefrontFooter() {
           <p className="text-xs text-stone-500">
             © {new Date().getFullYear()} Storix. All rights reserved.
           </p>
-          <p className="text-xs text-stone-500">Crafted with care · Ships worldwide</p>
+          <p className="text-xs text-stone-500">Crafted with care</p>
         </div>
       </div>
     </footer>

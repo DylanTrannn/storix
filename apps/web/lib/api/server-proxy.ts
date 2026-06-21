@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { getAccessToken } from '@/lib/auth/cookies';
+import { getValidAccessToken } from '@/lib/auth/session';
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
 export const CART_SESSION_COOKIE = 'cart_session_id';
@@ -8,7 +8,7 @@ const SESSION_MAX_AGE = 30 * 24 * 60 * 60;
 
 export async function buildApiHeaders(extra?: HeadersInit): Promise<Headers> {
   const headers = new Headers(extra);
-  const token = await getAccessToken();
+  const token = await getValidAccessToken();
 
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
-import { Check, ChevronDown } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 const Select = SelectPrimitive.Root;
@@ -20,9 +20,37 @@ function SelectTrigger({ className, children, ...props }: React.ComponentProps<t
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+        <ChevronDown className="size-4 shrink-0 opacity-50" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
+  );
+}
+
+function SelectScrollUpButton({
+  className,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {
+  return (
+    <SelectPrimitive.ScrollUpButton
+      className={cn('select-scroll-button flex cursor-default items-center justify-center py-1', className)}
+      {...props}
+    >
+      <ChevronUp className="size-4 opacity-50" />
+    </SelectPrimitive.ScrollUpButton>
+  );
+}
+
+function SelectScrollDownButton({
+  className,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {
+  return (
+    <SelectPrimitive.ScrollDownButton
+      className={cn('select-scroll-button flex cursor-default items-center justify-center py-1', className)}
+      {...props}
+    >
+      <ChevronDown className="size-4 opacity-50" />
+    </SelectPrimitive.ScrollDownButton>
   );
 }
 
@@ -35,40 +63,60 @@ function SelectContent({
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
-        className={cn(
-          'z-50 max-h-72 overflow-hidden rounded-lg border border-border bg-card text-foreground shadow-xl',
-          position === 'popper' &&
-            'w-[var(--radix-select-trigger-width)] data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1',
-          className,
-        )}
+        className={cn('select-content-popper', className)}
         position={position}
-        sideOffset={6}
-        collisionPadding={12}
+        sideOffset={4}
+        collisionPadding={8}
         {...props}
       >
-        <SelectPrimitive.Viewport className="p-1">{children}</SelectPrimitive.Viewport>
+        <SelectScrollUpButton />
+        <SelectPrimitive.Viewport className="select-viewport">{children}</SelectPrimitive.Viewport>
+        <SelectScrollDownButton />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   );
 }
 
+function SelectLabel({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Label>) {
+  return (
+    <SelectPrimitive.Label
+      className={cn('select-label px-3 py-1.5 text-xs font-medium text-muted-foreground', className)}
+      {...props}
+    />
+  );
+}
+
 function SelectItem({ className, children, ...props }: React.ComponentProps<typeof SelectPrimitive.Item>) {
   return (
-    <SelectPrimitive.Item
-      className={cn(
-        'relative flex w-full cursor-pointer select-none items-center rounded-sm py-2.5 pl-8 pr-3 text-sm outline-none focus:bg-muted focus:text-foreground data-[highlighted]:bg-muted',
-        className,
-      )}
-      {...props}
-    >
-      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <SelectPrimitive.Item className={cn('select-item', className)} {...props}>
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+      <span className="select-item-indicator">
         <SelectPrimitive.ItemIndicator>
-          <Check className="h-4 w-4" />
+          <Check className="size-4" />
         </SelectPrimitive.ItemIndicator>
       </span>
-      <SelectPrimitive.ItemText className="line-clamp-2">{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
   );
 }
 
-export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem };
+function SelectSeparator({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Separator>) {
+  return (
+    <SelectPrimitive.Separator
+      className={cn('select-separator -mx-1 my-1 h-px bg-border', className)}
+      {...props}
+    />
+  );
+}
+
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+  SelectScrollUpButton,
+  SelectScrollDownButton,
+};
