@@ -38,7 +38,8 @@ import {
   type ProductImageItem,
 } from '@/components/admin/product-image-uploader';
 
-const ProductFormSchema = CreateProductSchema.extend({
+const ProductFormSchema = CreateProductSchema.omit({ slug: true }).extend({
+  slug: z.string().optional(),
   priceInput: z.string().trim().min(1, 'Price is required'),
   inventoryInput: z.coerce.number().int().min(0, 'Inventory must be 0 or greater'),
   compareAtPriceInput: z.string().optional(),
@@ -71,7 +72,11 @@ function buildDefaultFormValues(
 ): ProductFormValues {
   return {
     status: 'draft',
-    ...defaultValues,
+    name: defaultValues?.name ?? '',
+    slug: defaultValues?.slug,
+    description: defaultValues?.description,
+    metaTitle: defaultValues?.metaTitle,
+    metaDescription: defaultValues?.metaDescription,
     priceInput: defaultVariant ? formatPriceInput(defaultVariant.price) : '',
     inventoryInput: defaultVariant?.inventory ?? 0,
     compareAtPriceInput: defaultVariant?.compareAtPrice
@@ -121,6 +126,7 @@ export function ProductForm({
     if (compareAtRaw && compareAtPrice === null) {
       throw new Error('Enter a valid compare-at price greater than 0.');
     }
+    const compareAtPriceValue = compareAtPrice ?? undefined;
 
     const sku = data.sku?.trim() || defaultProductSku(slug);
     const inventory = data.inventoryInput;
@@ -129,7 +135,7 @@ export function ProductForm({
       await updateProductVariantAction(productIdForVariant, defaultVariant.id, {
         sku,
         price,
-        compareAtPrice: compareAtPrice ?? null,
+        compareAtPrice: compareAtPriceValue,
         inventory,
       });
       return;
@@ -138,7 +144,7 @@ export function ProductForm({
     await createProductVariantAction(productIdForVariant, {
       sku,
       price,
-      compareAtPrice,
+      compareAtPrice: compareAtPriceValue,
       inventory,
     });
   }

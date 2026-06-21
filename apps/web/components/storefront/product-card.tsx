@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
-import type { Collection, Product } from '@storix/shared';
+import type { Collection, ProductPublic } from '@storix/shared';
 import { formatPrice, getProductMinPrice } from '@/lib/utils';
 
 interface ProductCardProps {
-  product: Product & { images?: { url: string; alt?: string | null }[]; variants?: { price: number }[] };
+  product: ProductPublic & { variants?: { price: number }[] };
 }
 
 export function ProductCard({ product }: ProductCardProps) {

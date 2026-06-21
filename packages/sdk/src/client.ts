@@ -20,6 +20,7 @@ import type {
   PresignUploadResponse,
   Product,
   ProductDetail,
+  ProductPublic,
   ProductListQuery,
   RegisterInput,
   ReorderProductImagesInput,
@@ -139,10 +140,10 @@ export function createStorixClient(config: StorixClientConfig) {
 
     // Products
     listProducts: (query?: Partial<ProductListQuery>) =>
-      request<PaginatedResponse<Product>>('/products', { params: query }),
+      request<PaginatedResponse<ProductPublic>>('/products', { params: query }),
 
     listAdminProducts: (query?: Partial<ProductListQuery>) =>
-      request<PaginatedResponse<Product>>('/products/admin/list', { params: query }),
+      request<PaginatedResponse<ProductPublic>>('/products/admin/list', { params: query }),
 
     getProductBySlug: (slug: string) => request<ProductDetail>(`/products/${slug}`),
 
