@@ -34,8 +34,8 @@ export function LoginForm() {
       if (!response.ok) {
         throw new Error('Login failed');
       }
-      const data = (await response.json()) as { user: User };
-      const redirect = getPostLoginPath(data.user.role, searchParams.get('redirect'));
+      const result = (await response.json()) as { user: User };
+      const redirect = getPostLoginPath(result.user.role, searchParams.get('redirect'));
       router.push(redirect);
       router.refresh();
     } catch {
