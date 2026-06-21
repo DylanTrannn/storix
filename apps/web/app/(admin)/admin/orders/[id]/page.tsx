@@ -1,11 +1,12 @@
 import { notFound } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-import { Badge } from '@storix/ui/badge';
 import { Separator } from '@storix/ui/separator';
 import { getAdminOrder } from '@/lib/api';
 import { formatPrice } from '@/lib/utils';
+import { formatAdminDateTime } from '@/lib/admin/labels';
 import { formatVnShippingAddress } from '@storix/shared';
+import { StatusBadge } from '@/components/admin/status-badge';
 import { TableSkeleton } from '@/components/skeletons';
 
 const OrderStatusForm = dynamic(
@@ -35,17 +36,15 @@ async function OrderDetail({ id }: { id: string }) {
       <div className="lg:col-span-2 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold">Order #{order.orderNumber}</h1>
+            <h1 className="text-2xl font-semibold">Đơn hàng #{order.orderNumber}</h1>
             <p className="text-sm text-muted-foreground">
-              {new Date(order.createdAt).toLocaleString()}
+              {formatAdminDateTime(order.createdAt)}
             </p>
           </div>
           <div className="flex flex-col items-end gap-1">
-            <Badge className="capitalize">{order.status}</Badge>
+            <StatusBadge status={order.status} />
             {order.paymentMethod === 'bank_transfer' && (
-              <Badge variant="outline" className="capitalize">
-                {order.paymentStatus.replace('_', ' ')}
-              </Badge>
+              <StatusBadge status={order.paymentStatus} />
             )}
           </div>
         </div>
@@ -57,7 +56,7 @@ async function OrderDetail({ id }: { id: string }) {
             <li key={item.id} className="flex justify-between py-3">
               <div>
                 <p className="font-medium">{item.productName}</p>
-                <p className="text-muted-foreground">Qty {item.quantity}</p>
+                <p className="text-muted-foreground">SL {item.quantity}</p>
               </div>
               <p>{formatPrice(item.price * item.quantity)}</p>
             </li>
@@ -65,7 +64,7 @@ async function OrderDetail({ id }: { id: string }) {
         </ul>
 
         <div className="flex justify-between border-t pt-4 font-semibold">
-          <span>Total</span>
+          <span>Tổng cộng</span>
           <span>{formatPrice(order.total)}</span>
         </div>
       </div>

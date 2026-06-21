@@ -70,7 +70,7 @@ export function AdminFormDialog({
             <button
               type="button"
               className="absolute inset-0 bg-black/80"
-              aria-label="Close dialog"
+              aria-label="Đóng hộp thoại"
               onClick={close}
             />
             <div
@@ -95,7 +95,7 @@ export function AdminFormDialog({
                   type="button"
                   className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring"
                   onClick={close}
-                  aria-label="Close"
+                  aria-label="Đóng"
                 >
                   <X className="h-4 w-4" />
                 </button>

@@ -26,9 +26,9 @@ export default function AdminCustomersPage() {
   return (
     <div>
       <AdminPageHeader
-        label="People"
-        title="Customers"
-        description="View registered customers and their order history."
+        label="Khách hàng"
+        title="Khách hàng"
+        description="Xem khách hàng đã đăng ký và lịch sử đơn hàng."
       />
       <Suspense fallback={<TableSkeleton rows={8} />}>
         <CustomersList />

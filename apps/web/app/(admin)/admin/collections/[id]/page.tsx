@@ -34,7 +34,7 @@ export default async function EditCollectionPage({ params }: PageProps) {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Edit collection</h1>
+      <h1 className="text-2xl font-semibold">Chỉnh sửa bộ sưu tập</h1>
       <div className="mt-6 max-w-xl">
         <Suspense fallback={<TableSkeleton rows={5} />}>
           <EditCollection id={id} />

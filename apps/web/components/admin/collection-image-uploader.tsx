@@ -54,7 +54,7 @@ export function CollectionImageUploader({ value, onChange }: CollectionImageUplo
 
         onChange(url);
       } catch {
-        setError('Failed to upload image.');
+        setError('Không thể tải ảnh lên.');
         setPreviewUrl((prev) => {
           if (prev) URL.revokeObjectURL(prev);
           return null;
@@ -76,14 +76,14 @@ export function CollectionImageUploader({ value, onChange }: CollectionImageUplo
 
   return (
     <div className="space-y-3">
-      <Label>Collection thumbnail</Label>
+      <Label>Ảnh đại diện bộ sưu tập</Label>
 
       {displayUrl ? (
         <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-3">
           <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-md bg-muted">
             <Image
               src={displayUrl}
-              alt="Collection thumbnail"
+              alt="Ảnh đại diện bộ sưu tập"
               fill
               className="object-cover"
               unoptimized={!!previewUrl}
@@ -91,7 +91,7 @@ export function CollectionImageUploader({ value, onChange }: CollectionImageUplo
           </div>
           <div className="flex flex-1 flex-col gap-2">
             <p className="text-sm text-muted-foreground">
-              {uploading ? 'Uploading…' : 'Thumbnail preview'}
+              {uploading ? 'Đang tải lên…' : 'Xem trước ảnh đại diện'}
             </p>
             <Button
               type="button"
@@ -102,7 +102,7 @@ export function CollectionImageUploader({ value, onChange }: CollectionImageUplo
               onClick={handleRemove}
             >
               <Trash2 className="mr-1 h-3.5 w-3.5" />
-              Remove
+              Xóa
             </Button>
           </div>
         </div>
@@ -110,9 +110,9 @@ export function CollectionImageUploader({ value, onChange }: CollectionImageUplo
         <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-border bg-muted/30 px-6 py-8 transition-colors hover:bg-muted/50">
           <Upload className="mb-2 h-6 w-6 text-muted-foreground" />
           <span className="text-sm font-medium">
-            {uploading ? 'Uploading…' : 'Upload thumbnail'}
+            {uploading ? 'Đang tải lên…' : 'Tải ảnh đại diện'}
           </span>
-          <span className="mt-1 text-xs text-muted-foreground">JPEG, PNG, WebP, GIF up to 5MB</span>
+          <span className="mt-1 text-xs text-muted-foreground">JPEG, PNG, WebP, GIF tối đa 5MB</span>
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp,image/gif"
@@ -129,7 +129,7 @@ export function CollectionImageUploader({ value, onChange }: CollectionImageUplo
 
       <div className="space-y-2">
         <Label htmlFor="imageUrl" className="text-xs text-muted-foreground">
-          Or paste image URL
+          Hoặc dán URL ảnh
         </Label>
         <Input
           id="imageUrl"

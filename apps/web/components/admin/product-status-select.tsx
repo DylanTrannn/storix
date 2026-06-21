@@ -49,10 +49,10 @@ export function ProductStatusSelect({ productId, value }: ProductStatusSelectPro
     <Select value={status} onValueChange={(v) => void handleChange(v as ProductStatus)} disabled={isUpdating}>
       <SelectTrigger
         className={cn(
-          'h-8 w-[8.5rem] cursor-pointer border font-medium capitalize',
+          'h-8 w-[8.5rem] cursor-pointer border font-medium',
           currentStyles.trigger,
         )}
-        aria-label="Product status"
+        aria-label="Trạng thái sản phẩm"
       >
         <SelectValue />
       </SelectTrigger>

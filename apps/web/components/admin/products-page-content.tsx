@@ -60,7 +60,7 @@ function ProductNameLink({ name, slug }: Pick<ProductRow, 'name' | 'slug'>) {
       target="_blank"
       rel="noopener noreferrer"
       className="font-medium text-foreground underline-offset-4 hover:text-primary hover:underline"
-      title="View product page (draft/archived visible to admins only)"
+      title="Xem trang sản phẩm (bản nháp/lưu trữ chỉ hiển thị với quản trị viên)"
     >
       {name}
     </Link>
@@ -108,14 +108,14 @@ export function ProductsPageContent({
   return (
     <>
       <AdminPageHeader
-        label="Catalog"
-        title="Products"
-        description="Manage your product catalog."
+        label="Danh mục"
+        title="Sản phẩm"
+        description="Quản lý danh mục sản phẩm của bạn."
         action={
           <AdminFormDialog
-            triggerLabel="Add product"
-            title="Add product"
-            description="Create a new product in your catalog."
+            triggerLabel="Thêm sản phẩm"
+            title="Thêm sản phẩm"
+            description="Tạo sản phẩm mới trong danh mục."
           >
             {({ onSuccess, onCancel }) => (
               <ProductForm
@@ -131,17 +131,17 @@ export function ProductsPageContent({
       />
 
       <div className="mb-4">
-        <AdminSearchBar search={search} placeholder="Search products by name…" />
+        <AdminSearchBar search={search} placeholder="Tìm sản phẩm theo tên…" />
       </div>
 
       <AdminTable
         data={products}
         getRowKey={(row) => row.id}
-        emptyMessage={search ? 'No products match your search.' : 'No products yet.'}
+        emptyMessage={search ? 'Không tìm thấy sản phẩm phù hợp.' : 'Chưa có sản phẩm nào.'}
         columns={[
           {
             key: 'name',
-            header: 'Product',
+            header: 'Sản phẩm',
             width: '42%',
             render: (row) => (
               <div className="flex min-w-0 items-center gap-3">
@@ -155,7 +155,7 @@ export function ProductsPageContent({
           },
           {
             key: 'price',
-            header: 'Price',
+            header: 'Giá',
             width: '13%',
             render: (row) =>
               row.minPrice != null ? (
@@ -166,13 +166,13 @@ export function ProductsPageContent({
           },
           {
             key: 'status',
-            header: 'Status',
+            header: 'Trạng thái',
             width: '22%',
             render: (row) => <ProductStatusSelect productId={row.id} value={row.status} />,
           },
           {
             key: 'actions',
-            header: 'Actions',
+            header: 'Thao tác',
             align: 'right',
             width: '18%',
             render: (row) => (
@@ -182,7 +182,7 @@ export function ProductsPageContent({
                   variant="ghost"
                   size="icon"
                   className={`h-8 w-8 cursor-pointer ${adminIconButtonClass}`}
-                  aria-label={`Edit ${row.name}`}
+                  aria-label={`Sửa ${row.name}`}
                   onClick={() => void openEdit(row.id)}
                 >
                   <Pencil className="h-4 w-4" />
@@ -192,7 +192,7 @@ export function ProductsPageContent({
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 cursor-pointer text-destructive hover:bg-destructive/10 hover:text-destructive"
-                  aria-label={`Delete ${row.name}`}
+                  aria-label={`Xóa ${row.name}`}
                   onClick={() => setDeleteTarget(row)}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -208,7 +208,7 @@ export function ProductsPageContent({
         totalPages={totalPages}
         total={total}
         search={search || undefined}
-        itemLabel="products"
+        itemLabel="sản phẩm"
         className="mt-4"
       />
 
@@ -218,12 +218,12 @@ export function ProductsPageContent({
           if (!open) closeEdit();
           else setEditOpen(true);
         }}
-        title="Edit product"
-        description={editProduct?.name ?? 'Update product details.'}
+        title="Sửa sản phẩm"
+        description={editProduct?.name ?? 'Cập nhật thông tin sản phẩm.'}
       >
         {({ onSuccess, onCancel }) =>
           editLoading ? (
-            <p className="text-sm text-muted-foreground">Loading product…</p>
+            <p className="text-sm text-muted-foreground">Đang tải sản phẩm…</p>
           ) : editProduct ? (
             <ProductForm
               key={editProduct.id}
@@ -274,10 +274,10 @@ export function ProductsPageContent({
         onOpenChange={(open) => {
           if (!open) setDeleteTarget(null);
         }}
-        title="Delete product?"
+        title="Xóa sản phẩm?"
         description={
           deleteTarget
-            ? `"${deleteTarget.name}" will be permanently deleted. This cannot be undone.`
+            ? `"${deleteTarget.name}" sẽ bị xóa vĩnh viễn. Không thể hoàn tác.`
             : ''
         }
         onConfirm={handleDelete}

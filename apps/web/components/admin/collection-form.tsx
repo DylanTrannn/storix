@@ -56,14 +56,14 @@ export function CollectionForm({
         }
       }
     } catch {
-      setError('Failed to save collection.');
+      setError('Không thể lưu bộ sưu tập.');
     }
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="name">Tên</Label>
         <Input id="name" {...register('name')} />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
       </div>
@@ -72,7 +72,7 @@ export function CollectionForm({
         <Input id="slug" {...register('slug')} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">Mô tả</Label>
         <Textarea id="description" rows={3} {...register('description')} />
       </div>
       <Controller
@@ -89,11 +89,11 @@ export function CollectionForm({
       <div className="flex justify-end gap-2 pt-2">
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            Hủy
           </Button>
         )}
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving…' : isEditing ? 'Update' : 'Create collection'}
+          {isSubmitting ? 'Đang lưu…' : isEditing ? 'Cập nhật' : 'Tạo bộ sưu tập'}
         </Button>
       </div>
     </form>

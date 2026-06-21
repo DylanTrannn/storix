@@ -40,8 +40,8 @@ import {
 
 const ProductFormSchema = CreateProductSchema.omit({ slug: true }).extend({
   slug: z.string().optional(),
-  priceInput: z.string().trim().min(1, 'Price is required'),
-  inventoryInput: z.coerce.number().int().min(0, 'Inventory must be 0 or greater'),
+  priceInput: z.string().trim().min(1, 'Vui lòng nhập giá'),
+  inventoryInput: z.coerce.number().int().min(0, 'Tồn kho phải từ 0 trở lên'),
   compareAtPriceInput: z.string().optional(),
   sku: z.string().optional(),
 });
@@ -118,13 +118,13 @@ export function ProductForm({
   async function saveVariant(productIdForVariant: string, slug: string, data: ProductFormValues) {
     const price = parsePriceInput(data.priceInput);
     if (price === null) {
-      throw new Error('Enter a valid price greater than 0.');
+      throw new Error('Nhập giá hợp lệ lớn hơn 0.');
     }
 
     const compareAtRaw = data.compareAtPriceInput?.trim();
     const compareAtPrice = compareAtRaw ? parsePriceInput(compareAtRaw) : undefined;
     if (compareAtRaw && compareAtPrice === null) {
-      throw new Error('Enter a valid compare-at price greater than 0.');
+      throw new Error('Nhập giá gốc hợp lệ lớn hơn 0.');
     }
     const compareAtPriceValue = compareAtPrice ?? undefined;
 
@@ -177,8 +177,8 @@ export function ProductForm({
         } catch (variantError) {
           setError(
             variantError instanceof Error
-              ? `${variantError.message} The product was created — edit it to set pricing.`
-              : 'Product created but pricing failed. Edit the product to set a price.',
+              ? `${variantError.message} Sản phẩm đã được tạo — hãy chỉnh sửa để đặt giá.`
+              : 'Sản phẩm đã tạo nhưng đặt giá thất bại. Hãy chỉnh sửa sản phẩm để đặt giá.',
           );
           onSuccess?.();
           router.refresh();
@@ -195,7 +195,7 @@ export function ProductForm({
       if (err instanceof ApiError) {
         if (err.status === 409) {
           setError(
-            `${err.message}. Check the products list — a draft with this slug may already exist.`,
+            `${err.message}. Kiểm tra danh sách sản phẩm — có thể đã có bản nháp với slug này.`,
           );
         } else {
           setError(err.message);
@@ -203,7 +203,7 @@ export function ProductForm({
       } else if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('Failed to save product. Please try again.');
+        setError('Không thể lưu sản phẩm. Vui lòng thử lại.');
       }
     }
   }
@@ -211,14 +211,14 @@ export function ProductForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="name">Tên</Label>
         <Input id="name" {...register('name')} />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="slug">Slug</Label>
-        <Input id="slug" placeholder="auto-generated if empty" {...register('slug')} />
+        <Input id="slug" placeholder="Tự động tạo nếu để trống" {...register('slug')} />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -238,7 +238,7 @@ export function ProductForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="inventoryInput">Inventory</Label>
+          <Label htmlFor="inventoryInput">Tồn kho</Label>
           <Input id="inventoryInput" type="number" min="0" step="1" {...register('inventoryInput')} />
           {errors.inventoryInput && (
             <p className="text-sm text-destructive">{errors.inventoryInput.message}</p>
@@ -254,41 +254,40 @@ export function ProductForm({
             type="number"
             min={isZeroDecimalCurrency() ? '1' : '0.01'}
             step={priceStep}
-            placeholder="Optional"
+            placeholder="Tùy chọn"
             {...register('compareAtPriceInput')}
           />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="sku">SKU</Label>
-          <Input id="sku" placeholder="Auto-generated if empty" {...register('sku')} />
+          <Input id="sku" placeholder="Tự động tạo nếu để trống" {...register('sku')} />
         </div>
       </div>
 
       {variantCount > 1 && (
         <p className="text-xs text-muted-foreground">
-          This product has {variantCount} variants. Price and inventory here apply to the primary
-          variant only.
+          Sản phẩm này có {variantCount} biến thể. Giá và tồn kho ở đây chỉ áp dụng cho biến thể chính.
         </p>
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">Mô tả</Label>
         <Textarea id="description" rows={4} {...register('description')} />
       </div>
 
       <ProductImageUploader productId={productId} images={images} onChange={setImages} />
 
       <div className="space-y-2">
-        <Label>Status</Label>
+        <Label>Trạng thái</Label>
         <Select value={status} onValueChange={(v) => setValue('status', v as CreateProductInput['status'])}>
           <SelectTrigger className="bg-background">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="draft">Draft</SelectItem>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="archived">Archived</SelectItem>
+            <SelectItem value="draft">Bản nháp</SelectItem>
+            <SelectItem value="active">Đang bán</SelectItem>
+            <SelectItem value="archived">Lưu trữ</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -298,11 +297,11 @@ export function ProductForm({
       <div className="flex justify-end gap-2 pt-2">
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            Hủy
           </Button>
         )}
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving…' : isEditing ? 'Update product' : 'Create product'}
+          {isSubmitting ? 'Đang lưu…' : isEditing ? 'Cập nhật sản phẩm' : 'Tạo sản phẩm'}
         </Button>
       </div>
     </form>

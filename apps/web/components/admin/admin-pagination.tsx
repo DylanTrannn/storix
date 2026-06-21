@@ -21,7 +21,7 @@ export function AdminPagination({
   totalPages,
   total,
   search,
-  itemLabel = 'items',
+  itemLabel = 'mục',
   className,
 }: AdminPaginationProps) {
   const pathname = usePathname();
@@ -36,12 +36,12 @@ export function AdminPagination({
 
   return (
     <nav
-      aria-label="Pagination"
+      aria-label="Phân trang"
       className={cn('flex items-center justify-between gap-4 border-t border-border pt-4', className)}
     >
       <p className="text-sm text-muted-foreground">
         {total} {itemLabel}
-        {totalPages > 1 ? ` · Page ${page} of ${totalPages}` : ''}
+        {totalPages > 1 ? ` · Trang ${page}/${totalPages}` : ''}
       </p>
       {totalPages > 1 && (
         <div className="flex gap-2">
@@ -49,25 +49,25 @@ export function AdminPagination({
             <Button variant="outline" size="sm" asChild>
               <Link href={buildHref(page - 1)} className="gap-1">
                 <ChevronLeft className="h-4 w-4" />
-                Previous
+                Trước
               </Link>
             </Button>
           ) : (
             <Button variant="outline" size="sm" disabled className="gap-1">
               <ChevronLeft className="h-4 w-4" />
-              Previous
+              Trước
             </Button>
           )}
           {hasNext ? (
             <Button variant="outline" size="sm" asChild>
               <Link href={buildHref(page + 1)} className="gap-1">
-                Next
+                Sau
                 <ChevronRight className="h-4 w-4" />
               </Link>
             </Button>
           ) : (
             <Button variant="outline" size="sm" disabled className="gap-1">
-              Next
+              Sau
               <ChevronRight className="h-4 w-4" />
             </Button>
           )}

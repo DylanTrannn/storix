@@ -12,13 +12,14 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ADMIN_NAV } from '@/lib/admin/labels';
 
 const navItems: { href: string; label: string; icon: LucideIcon }[] = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/products', label: 'Products', icon: Package },
-  { href: '/admin/collections', label: 'Collections', icon: FolderOpen },
-  { href: '/admin/orders', label: 'Orders', icon: ShoppingBag },
-  { href: '/admin/customers', label: 'Customers', icon: Users },
+  { href: '/admin', label: ADMIN_NAV.dashboard, icon: LayoutDashboard },
+  { href: '/admin/products', label: ADMIN_NAV.products, icon: Package },
+  { href: '/admin/collections', label: ADMIN_NAV.collections, icon: FolderOpen },
+  { href: '/admin/orders', label: ADMIN_NAV.orders, icon: ShoppingBag },
+  { href: '/admin/customers', label: ADMIN_NAV.customers, icon: Users },
 ];
 
 export function AdminSidebar() {
@@ -32,11 +33,11 @@ export function AdminSidebar() {
           className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight"
         >
           Storix
-          <span className="ml-1.5 text-xs font-normal text-primary">Admin</span>
+          <span className="ml-1.5 text-xs font-normal text-primary">Quản trị</span>
         </Link>
       </div>
 
-      <nav className="flex-1 space-y-1 p-4" aria-label="Admin navigation">
+      <nav className="flex-1 space-y-1 p-4" aria-label="Điều hướng quản trị">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -67,7 +68,7 @@ export function AdminSidebar() {
           className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-stone-400 transition-colors duration-200 hover:bg-stone-800 hover:text-white"
         >
           <LogOut className="h-4 w-4" />
-          Back to storefront
+          {ADMIN_NAV.backToStorefront}
         </Link>
       </div>
     </aside>

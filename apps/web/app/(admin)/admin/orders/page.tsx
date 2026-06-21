@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { getAdminOrders } from '@/lib/api';
 import { formatPrice } from '@/lib/utils';
+import { formatAdminDate } from '@/lib/admin/labels';
 import { AdminPageHeader } from '@/components/admin/page-header';
 import { TableSkeleton } from '@/components/skeletons';
 
@@ -21,7 +22,7 @@ async function OrdersList() {
         paymentStatus: o.paymentStatus,
         paymentMethod: o.paymentMethod,
         total: formatPrice(o.total),
-        createdAt: new Date(o.createdAt).toLocaleDateString(),
+        createdAt: formatAdminDate(o.createdAt),
       }))}
     />
   );
@@ -31,9 +32,9 @@ export default function AdminOrdersPage() {
   return (
     <div>
       <AdminPageHeader
-        label="Commerce"
-        title="Orders"
-        description="View and manage customer orders."
+        label="Kinh doanh"
+        title="Đơn hàng"
+        description="Xem và quản lý đơn hàng của khách."
       />
       <Suspense fallback={<TableSkeleton rows={8} />}>
         <OrdersList />

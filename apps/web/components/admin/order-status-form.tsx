@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@storix/ui/select';
+import { getOrderStatusLabel } from '@/lib/admin/labels';
 import { updateOrderStatusAction } from '@/lib/actions/admin';
 
 const STATUSES: OrderStatus[] = [
@@ -45,24 +46,24 @@ export function OrderStatusForm({ orderId, currentStatus }: OrderStatusFormProps
 
   return (
     <div className="rounded-lg border p-4 space-y-4">
-      <h2 className="font-medium">Update status</h2>
+      <h2 className="font-medium">Cập nhật trạng thái</h2>
       <div className="space-y-2">
-        <Label htmlFor="status">Status</Label>
+        <Label htmlFor="status">Trạng thái</Label>
         <Select value={status} onValueChange={(v) => setStatus(v as OrderStatus)}>
           <SelectTrigger id="status">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {STATUSES.map((s) => (
-              <SelectItem key={s} value={s} className="capitalize">
-                {s}
+              <SelectItem key={s} value={s}>
+                {getOrderStatusLabel(s)}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
       <Button onClick={handleUpdate} disabled={isLoading || status === currentStatus}>
-        {isLoading ? 'Updating…' : 'Update status'}
+        {isLoading ? 'Đang cập nhật…' : 'Cập nhật trạng thái'}
       </Button>
     </div>
   );

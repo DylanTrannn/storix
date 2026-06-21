@@ -1,5 +1,11 @@
 import { cn } from '@/lib/utils';
 import { getProductStatusBadgeClass } from '@/components/admin/product-status-styles';
+import {
+  getOrderStatusLabel,
+  getPaymentStatusLabel,
+  getProductStatusLabel,
+} from '@/lib/admin/labels';
+import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS } from '@/lib/order-labels';
 import type { ProductStatus } from '@storix/shared';
 
 const statusStyles: Record<string, string> = {
@@ -21,15 +27,28 @@ function getStatusClass(status: string) {
   return statusStyles[status] ?? 'bg-muted text-muted-foreground';
 }
 
+function getStatusLabel(status: string) {
+  if (status === 'active' || status === 'draft' || status === 'archived') {
+    return getProductStatusLabel(status);
+  }
+  if (status in ORDER_STATUS_LABELS) {
+    return getOrderStatusLabel(status);
+  }
+  if (status in PAYMENT_STATUS_LABELS) {
+    return getPaymentStatusLabel(status);
+  }
+  return status;
+}
+
 export function StatusBadge({ status }: { status: string }) {
   return (
     <span
       className={cn(
-        'inline-flex w-fit shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium capitalize',
+        'inline-flex w-fit shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium',
         getStatusClass(status),
       )}
     >
-      {status}
+      {getStatusLabel(status)}
     </span>
   );
 }

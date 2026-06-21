@@ -1,5 +1,6 @@
 import type { ProductStatus } from '@storix/shared';
 import { cn } from '@/lib/utils';
+import { getProductStatusLabel } from '@/lib/admin/labels';
 
 export const PRODUCT_STATUSES: ProductStatus[] = ['draft', 'active', 'archived'];
 
@@ -32,9 +33,9 @@ export function ProductStatusLabel({ status }: { status: ProductStatus }) {
   const { dot } = getProductStatusStyles(status);
 
   return (
-    <span className="flex items-center gap-2 capitalize">
+    <span className="flex items-center gap-2">
       <span className={cn('h-2 w-2 shrink-0 rounded-full', dot)} aria-hidden />
-      {status}
+      {getProductStatusLabel(status)}
     </span>
   );
 }

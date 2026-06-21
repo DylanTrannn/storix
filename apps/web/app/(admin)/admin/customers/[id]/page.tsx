@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@storix/ui/card';
 import { getAdminCustomer } from '@/lib/api';
 import { formatPrice } from '@/lib/utils';
+import { formatAdminDate, getUserRoleLabel } from '@/lib/admin/labels';
 import { TableSkeleton } from '@/components/skeletons';
 
 interface PageProps {
@@ -28,20 +29,20 @@ async function CustomerDetail({ id }: { id: string }) {
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">
           <p>{customer.email}</p>
-          <p className="mt-2 capitalize">Role: {customer.role}</p>
+          <p className="mt-2">Vai trò: {getUserRoleLabel(customer.role)}</p>
           <p className="mt-2">
-            Joined {new Date(customer.createdAt).toLocaleDateString()}
+            Tham gia {formatAdminDate(customer.createdAt)}
           </p>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Order history</CardTitle>
+          <CardTitle>Lịch sử đơn hàng</CardTitle>
         </CardHeader>
         <CardContent>
           {!customer.orders || customer.orders.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No orders.</p>
+            <p className="text-sm text-muted-foreground">Chưa có đơn hàng.</p>
           ) : (
             <ul className="divide-y text-sm">
               {customer.orders.map((order) => (
@@ -65,7 +66,7 @@ export default async function AdminCustomerPage({ params }: PageProps) {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Customer details</h1>
+      <h1 className="text-2xl font-semibold">Chi tiết khách hàng</h1>
       <Suspense fallback={<TableSkeleton rows={4} />}>
         <div className="mt-6">
           <CustomerDetail id={id} />

@@ -15,11 +15,11 @@ export function CustomersTable({ customers }: { customers: CustomerRow[] }) {
     <AdminTable
       data={customers}
       getRowKey={(row) => row.id}
-      emptyMessage="No customers yet."
+      emptyMessage="Chưa có khách hàng nào."
       columns={[
         {
           key: 'name',
-          header: 'Name',
+          header: 'Tên',
           width: '35%',
           cellClassName: 'font-medium',
           render: (row) => row.name,
@@ -33,12 +33,12 @@ export function CustomersTable({ customers }: { customers: CustomerRow[] }) {
         },
         {
           key: 'actions',
-          header: 'Actions',
+          header: 'Thao tác',
           align: 'right',
           width: '20%',
           render: (row) => (
             <Button variant="ghost" size="sm" asChild className="cursor-pointer">
-              <Link href={`/admin/customers/${row.id}`}>View</Link>
+              <Link href={`/admin/customers/${row.id}`}>Xem</Link>
             </Button>
           ),
         },

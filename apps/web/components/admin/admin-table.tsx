@@ -27,7 +27,7 @@ const alignClass = {
 export function AdminTable<T>({
   columns,
   data,
-  emptyMessage = 'No records found.',
+  emptyMessage = 'Không có dữ liệu.',
   getRowKey,
 }: AdminTableProps<T>) {
   if (data.length === 0) {

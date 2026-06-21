@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@storix/ui/card';
 import { Badge } from '@storix/ui/badge';
 import { getDashboardStats } from '@/lib/api';
 import { formatPrice } from '@/lib/utils';
+import { getOrderStatusLabel } from '@/lib/admin/labels';
 import { TableSkeleton } from '@/components/skeletons';
 
 const metricIcons = {
@@ -35,10 +36,10 @@ async function DashboardStats() {
   }
 
   const metrics = [
-    { key: 'orders' as const, label: 'Total orders', value: stats.totalOrders.toString() },
-    { key: 'revenue' as const, label: 'Revenue', value: formatPrice(stats.totalRevenue) },
-    { key: 'products' as const, label: 'Products', value: stats.totalProducts.toString() },
-    { key: 'customers' as const, label: 'Customers', value: stats.totalCustomers.toString() },
+    { key: 'orders' as const, label: 'Tổng đơn hàng', value: stats.totalOrders.toString() },
+    { key: 'revenue' as const, label: 'Doanh thu', value: formatPrice(stats.totalRevenue) },
+    { key: 'products' as const, label: 'Sản phẩm', value: stats.totalProducts.toString() },
+    { key: 'customers' as const, label: 'Khách hàng', value: stats.totalCustomers.toString() },
   ];
 
   return (
@@ -69,18 +70,18 @@ async function DashboardStats() {
 
       <Card className="mt-8 border-border shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="heading-display text-xl">Recent orders</CardTitle>
+          <CardTitle className="heading-display text-xl">Đơn hàng gần đây</CardTitle>
           <Link
             href="/admin/orders"
             className="flex cursor-pointer items-center gap-1 text-sm font-medium text-primary transition-colors duration-200 hover:text-primary/80"
           >
-            View all
+            Xem tất cả
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </CardHeader>
         <CardContent>
           {stats.recentOrders.length === 0 ? (
-            <p className="py-8 text-center text-sm text-muted-foreground">No recent orders.</p>
+            <p className="py-8 text-center text-sm text-muted-foreground">Chưa có đơn hàng nào.</p>
           ) : (
             <ul className="divide-y divide-border">
               {stats.recentOrders.map((order) => (
@@ -91,8 +92,8 @@ async function DashboardStats() {
                   >
                     #{order.id.slice(0, 8)}
                   </Link>
-                  <Badge variant="secondary" className="capitalize">
-                    {order.status}
+                  <Badge variant="secondary">
+                    {getOrderStatusLabel(order.status)}
                   </Badge>
                   <span className="font-semibold">{formatPrice(order.total)}</span>
                 </li>
@@ -109,10 +110,10 @@ export default function AdminDashboardPage() {
   return (
     <div>
       <div className="mb-8">
-        <p className="section-label">Overview</p>
-        <h1 className="heading-display mt-1 text-3xl">Dashboard</h1>
+        <p className="section-label">Tổng quan</p>
+        <h1 className="heading-display mt-1 text-3xl">Bảng điều khiển</h1>
         <p className="mt-2 text-muted-foreground">
-          Track your store performance at a glance.
+          Theo dõi hiệu suất cửa hàng của bạn.
         </p>
       </div>
       <Suspense fallback={<TableSkeleton rows={4} />}>

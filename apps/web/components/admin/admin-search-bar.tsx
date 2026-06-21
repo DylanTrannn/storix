@@ -12,7 +12,7 @@ interface AdminSearchBarProps {
 
 export function AdminSearchBar({
   search,
-  placeholder = 'Search…',
+  placeholder = 'Tìm kiếm…',
 }: AdminSearchBarProps) {
   const router = useRouter();
   const pathname = usePathname();

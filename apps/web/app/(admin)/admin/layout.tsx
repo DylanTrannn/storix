@@ -18,7 +18,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/95 px-6 backdrop-blur-md">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              Merchant panel
+              Bảng điều khiển
             </p>
             <p className="text-sm text-muted-foreground">
               {user.firstName} {user.lastName}
@@ -29,7 +29,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               variant="ghost"
               size="icon"
               className={`cursor-pointer rounded-full ${adminIconButtonClass}`}
-              aria-label="Notifications"
+              aria-label="Thông báo"
             >
               <Bell className="h-4 w-4" />
             </Button>

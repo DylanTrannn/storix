@@ -24,11 +24,11 @@ export function formatPriceInput(amount: number): string {
 }
 
 export function getPriceFieldLabel() {
-  return isZeroDecimalCurrency() ? `Price (${CURRENCY})` : 'Price';
+  return isZeroDecimalCurrency() ? `Giá (${CURRENCY})` : 'Giá';
 }
 
 export function getCompareAtPriceFieldLabel() {
-  return isZeroDecimalCurrency() ? `Compare-at price (${CURRENCY})` : 'Compare-at price';
+  return isZeroDecimalCurrency() ? `Giá gốc (${CURRENCY})` : 'Giá gốc';
 }
 
 export function defaultProductSku(slug: string) {

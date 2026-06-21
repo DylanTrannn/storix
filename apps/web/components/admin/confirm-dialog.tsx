@@ -25,8 +25,8 @@ export function AdminConfirmDialog({
   onOpenChange,
   title,
   description,
-  confirmLabel = 'Delete',
-  pendingLabel = 'Deleting…',
+  confirmLabel = 'Xóa',
+  pendingLabel = 'Đang xóa…',
   onConfirm,
 }: AdminConfirmDialogProps) {
   const [pending, setPending] = useState(false);
@@ -63,7 +63,7 @@ export function AdminConfirmDialog({
             disabled={pending}
             onClick={() => onOpenChange(false)}
           >
-            Cancel
+            Hủy
           </Button>
           <Button
             type="button"

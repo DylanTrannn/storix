@@ -104,8 +104,8 @@ export function ProductImageUploader({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium">Product images</p>
-        <p className="text-xs text-muted-foreground">First image is the thumbnail</p>
+        <p className="text-sm font-medium">Hình ảnh sản phẩm</p>
+        <p className="text-xs text-muted-foreground">Ảnh đầu tiên là ảnh đại diện</p>
       </div>
 
       {images.length > 0 && (
@@ -129,7 +129,7 @@ export function ProductImageUploader({
                 {(image.previewUrl || image.url) && (
                   <Image
                     src={image.previewUrl || image.url}
-                    alt={image.alt ?? 'Product image'}
+                    alt={image.alt ?? 'Hình ảnh sản phẩm'}
                     fill
                     className="object-cover"
                     unoptimized={!!image.previewUrl}
@@ -138,14 +138,14 @@ export function ProductImageUploader({
                 {index === 0 && (
                   <span className="absolute left-1 top-1 inline-flex items-center gap-0.5 rounded bg-primary px-1 py-0.5 text-[10px] font-medium text-primary-foreground">
                     <Star className="h-2.5 w-2.5" />
-                    Thumb
+                    Chính
                   </span>
                 )}
               </div>
               <div className="min-w-0 flex-1 space-y-2">
                 <Input
                   value={image.alt ?? ''}
-                  placeholder="Alt text"
+                  placeholder="Mô tả ảnh"
                   onChange={(e) => {
                     const next = [...images];
                     next[index] = { ...next[index], alt: e.target.value };
@@ -161,7 +161,7 @@ export function ProductImageUploader({
                   onClick={() => handleRemove(index)}
                 >
                   <Trash2 className="mr-1 h-3.5 w-3.5" />
-                  Remove
+                  Xóa
                 </Button>
               </div>
             </div>
@@ -172,9 +172,9 @@ export function ProductImageUploader({
       {images.length < maxImages && (
         <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-border bg-muted/30 px-6 py-8 transition-colors hover:bg-muted/50">
           <Upload className="mb-2 h-6 w-6 text-muted-foreground" />
-          <span className="text-sm font-medium">Upload images</span>
+          <span className="text-sm font-medium">Tải ảnh lên</span>
           <span className="mt-1 text-xs text-muted-foreground">
-            JPEG, PNG, WebP, GIF up to 5MB ({images.length}/{maxImages})
+            JPEG, PNG, WebP, GIF tối đa 5MB ({images.length}/{maxImages})
           </span>
           <input
             type="file"

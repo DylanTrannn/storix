@@ -53,14 +53,14 @@ export function CollectionsPageContent({
   return (
     <>
       <AdminPageHeader
-        label="Catalog"
-        title="Collections"
-        description="Organize products into collections."
+        label="Danh mục"
+        title="Bộ sưu tập"
+        description="Nhóm sản phẩm thành các bộ sưu tập."
         action={
           <AdminFormDialog
-            triggerLabel="Add collection"
-            title="Add collection"
-            description="Create a new collection for your storefront."
+            triggerLabel="Thêm bộ sưu tập"
+            title="Thêm bộ sưu tập"
+            description="Tạo bộ sưu tập mới cho cửa hàng."
           >
             {({ onSuccess, onCancel }) => (
               <CollectionForm
@@ -76,13 +76,13 @@ export function CollectionsPageContent({
       />
 
       <div className="mb-4">
-        <AdminSearchBar search={search} placeholder="Search collections by name…" />
+        <AdminSearchBar search={search} placeholder="Tìm bộ sưu tập theo tên…" />
       </div>
 
       <AdminTable
         data={collections}
         getRowKey={(row) => row.id}
-        emptyMessage={search ? 'No collections match your search.' : 'No collections yet.'}
+        emptyMessage={search ? 'Không tìm thấy bộ sưu tập phù hợp.' : 'Chưa có bộ sưu tập nào.'}
         columns={[
           {
             key: 'thumbnail',
@@ -92,7 +92,7 @@ export function CollectionsPageContent({
           },
           {
             key: 'name',
-            header: 'Name',
+            header: 'Tên',
             width: '35%',
             cellClassName: 'font-medium',
             render: (row) => row.name,
@@ -106,12 +106,12 @@ export function CollectionsPageContent({
           },
           {
             key: 'actions',
-            header: 'Actions',
+            header: 'Thao tác',
             align: 'right',
             width: '15%',
             render: (row) => (
               <Button variant="ghost" size="sm" asChild className="cursor-pointer">
-                <Link href={`/admin/collections/${row.id}`}>Edit</Link>
+                <Link href={`/admin/collections/${row.id}`}>Sửa</Link>
               </Button>
             ),
           },
@@ -123,7 +123,7 @@ export function CollectionsPageContent({
         totalPages={totalPages}
         total={total}
         search={search || undefined}
-        itemLabel="collections"
+        itemLabel="bộ sưu tập"
         className="mt-4"
       />
     </>
