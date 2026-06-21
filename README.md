@@ -67,4 +67,4 @@ packages/sdk/     API client
 packages/ui/      Shadcn components
 ```
 
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for Coolify/VPS deployment.
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for Coolify/VPS deployment. Before handing off to a customer, generate a **new** production env (secrets, DB, R2, URLs) — do not reuse local `.env` files; see the handoff section in that doc.

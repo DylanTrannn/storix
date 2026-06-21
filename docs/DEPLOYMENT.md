@@ -120,8 +120,84 @@ pnpm dev
 - **Frontend:** Next.js 15 Server Components, ISR (`revalidate = 60`), `React.cache()` API helpers, dynamic imports for admin UI
 - **Auth:** JWT access token (cookie) + httpOnly refresh token cookie
 
+## Render + Vercel (API on Render, web on Vercel)
+
+### Render API — Web Service
+
+| Setting | Value |
+| ------- | ----- |
+| Root Directory | *(empty — repo root)* |
+| Language | Node |
+| Node version | `20` (via `.node-version` in repo) |
+
+**Build Command** — do **not** use `corepack enable` on Render (read-only filesystem):
+
+```bash
+npm install -g pnpm@9.15.9 && pnpm install --frozen-lockfile && pnpm --filter @storix/shared build && pnpm --filter @storix/api build
+```
+
+**Start Command:**
+
+```bash
+cd apps/api && node dist/infrastructure/database/migrate.js && node dist/main.js
+```
+
+**Health check:** `GET /api/health`
+
+Set API env vars from `apps/api/.env.example` (see customer handoff section below). Use Render Postgres + Upstash Redis for `DATABASE_URL` and `REDIS_URL`.
+
+**Alternative:** deploy with Docker (`apps/api/Dockerfile`, context `.`) to avoid Node/pnpm setup on the host.
+
+### Vercel (web)
+
+Set `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_STORE_CURRENCY`, and `NEXT_PUBLIC_R2_PUBLIC_URL` in Vercel env. Build is handled automatically for `apps/web`.
+
+---
+
 ## Independent Deploys
 
 - Deploy **web** alone when frontend changes — only needs `NEXT_PUBLIC_API_URL`
 - Deploy **api** alone when backend changes — run migrations if schema changed
 - Regenerate SDK after API contract changes: `pnpm generate:sdk`
+
+## Customer handoff — generate a fresh production env
+
+**Do not copy your local or staging `.env` files to the customer.** Dev credentials must never go to production or to another tenant.
+
+Before handoff, provision **new** infrastructure in the customer's accounts (or accounts you transfer to them) and fill env from scratch using `apps/api/.env.example` and `apps/web/.env.example`.
+
+### Must be new per customer / environment
+
+| Variable | Action |
+| -------- | ------ |
+| `JWT_SECRET` | Generate a new long random string (e.g. `openssl rand -base64 48`) |
+| `DATABASE_URL` | New PostgreSQL instance — empty DB, then migrate + seed |
+| `REDIS_URL` | New Redis instance (Upstash, Render, etc.) |
+| `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL` | New R2 bucket + API token; update bucket CORS with customer's shop URL |
+| `CORS_ORIGIN`, `APP_URL` | Customer's production shop URL (e.g. `https://shop.customer.com`) |
+| `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_APP_URL` | Customer's API and shop URLs |
+| `NEXT_PUBLIC_R2_PUBLIC_URL` | Same as customer's `R2_PUBLIC_URL` |
+| `BANK_*`, `STORE_NAME` | Customer's bank and store details |
+
+### Set per deployment (not secrets, but customer-specific)
+
+- `STORE_CURRENCY`, `NEXT_PUBLIC_STORE_CURRENCY`
+- `NODE_ENV=production` on API; Vercel sets production for web automatically
+- Cookie names (`ACCESS_TOKEN_COOKIE`, `REFRESH_TOKEN_COOKIE`) — defaults are fine unless the customer runs multiple Storix instances on the same parent domain
+
+### After deploy checklist
+
+1. Run migrations and seed once on the **new** database.
+2. Change the default admin password (`admin@storix.local` / `admin123456`) or create a new admin and disable the seed account.
+3. Confirm R2 CORS includes the customer's shop origin.
+4. Store production secrets only in the host's env UI (Vercel, Render, Coolify) — never commit them to git.
+5. Hand the customer a **sanitized** env template (keys only, no values) or a password manager entry — not your dev `.env` file.
+
+### Quick generate (API)
+
+```bash
+# JWT secret
+openssl rand -base64 48
+```
+
+Copy `apps/api/.env.example` → fill with customer URLs and new secrets. Mirror public URLs on web (`NEXT_PUBLIC_*`).
