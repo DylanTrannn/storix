@@ -2,12 +2,13 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { LoginSchema, type LoginInput } from '@storix/shared';
+import { LoginSchema, type LoginInput, type User } from '@storix/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@storix/ui/button';
 import { Input } from '@storix/ui/input';
 import { Label } from '@storix/ui/label';
+import { getPostLoginPath } from '@/lib/auth/redirect';
 
 export function LoginForm() {
   const router = useRouter();
@@ -33,7 +34,8 @@ export function LoginForm() {
       if (!response.ok) {
         throw new Error('Login failed');
       }
-      const redirect = searchParams.get('redirect') ?? '/account';
+      const data = (await response.json()) as { user: User };
+      const redirect = getPostLoginPath(data.user.role, searchParams.get('redirect'));
       router.push(redirect);
       router.refresh();
     } catch {

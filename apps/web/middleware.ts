@@ -6,7 +6,8 @@ import {
   INTERNAL_ACCESS_TOKEN_HEADER,
   REFRESH_TOKEN_COOKIE,
 } from '@/lib/auth/constants';
-import { isAccessTokenExpired } from '@/lib/auth/jwt';
+import { isAccessTokenExpired, getRoleFromAccessToken } from '@/lib/auth/jwt';
+import { getPostLoginPath } from '@/lib/auth/redirect';
 import { fetchRefreshedTokens } from '@/lib/auth/refresh';
 
 function stripInternalAuthHeader(request: NextRequest): Headers {
@@ -53,7 +54,10 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isAuthenticated && (pathname === '/login' || pathname === '/register')) {
-    return NextResponse.redirect(new URL('/account', request.url));
+    const role = accessToken ? getRoleFromAccessToken(accessToken) : null;
+    const redirectParam = request.nextUrl.searchParams.get('redirect');
+    const destination = getPostLoginPath(role ?? 'customer', redirectParam);
+    return NextResponse.redirect(new URL(destination, request.url));
   }
 
   return response ?? NextResponse.next({ request: { headers: requestHeaders } });

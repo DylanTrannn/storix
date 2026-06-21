@@ -2,16 +2,18 @@ import Link from 'next/link';
 import { Instagram, Mail } from 'lucide-react';
 import type { Collection } from '@storix/shared';
 
-const companyLinks = [
-  { href: '/account', label: 'My account' },
-  { href: '/admin', label: 'Merchant login' },
-];
-
 interface StorefrontFooterProps {
   collections: Collection[];
+  isAdmin?: boolean;
 }
 
-export function StorefrontFooter({ collections }: StorefrontFooterProps) {
+export function StorefrontFooter({ collections, isAdmin = false }: StorefrontFooterProps) {
+  const companyLinks = [
+    { href: '/account', label: 'My account' },
+    isAdmin
+      ? { href: '/admin', label: 'Admin dashboard' }
+      : { href: '/admin', label: 'Merchant login' },
+  ];
   const shopLinks = [
     { href: '/collections/all', label: 'All products' },
     ...collections.map((collection) => ({

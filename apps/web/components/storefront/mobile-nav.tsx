@@ -3,16 +3,17 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { ChevronDown, LayoutDashboard, Menu, X } from 'lucide-react';
 import type { Collection } from '@storix/shared';
 import { Button } from '@storix/ui/button';
 import { cn } from '@/lib/utils';
 
 interface MobileNavProps {
   collections: Collection[];
+  isAdmin?: boolean;
 }
 
-export function MobileNav({ collections }: MobileNavProps) {
+export function MobileNav({ collections, isAdmin = false }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(true);
   const pathname = usePathname();
@@ -98,6 +99,16 @@ export function MobileNav({ collections }: MobileNavProps) {
                   Tài khoản
                 </Link>
               </li>
+              {isAdmin && (
+                <li>
+                  <Link href="/admin" onClick={closeMenu} className={linkClass('/admin')}>
+                    <span className="inline-flex items-center gap-2">
+                      <LayoutDashboard className="h-4 w-4" />
+                      Quản trị
+                    </span>
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
         </>

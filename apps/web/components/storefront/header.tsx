@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Collection } from '@storix/shared';
-import { CircleUser, Heart } from 'lucide-react';
+import { CircleUser, Heart, LayoutDashboard } from 'lucide-react';
 import { CartDrawerTrigger, HeaderIconLink } from '@/components/cart/cart-drawer-trigger';
 import { MobileNav } from '@/components/storefront/mobile-nav';
 import { ShopNavMenu } from '@/components/storefront/shop-nav-menu';
@@ -8,9 +8,10 @@ import { StorefrontSearch } from '@/components/storefront/storefront-search';
 
 interface StorefrontHeaderProps {
   collections: Collection[];
+  isAdmin?: boolean;
 }
 
-export function StorefrontHeader({ collections }: StorefrontHeaderProps) {
+export function StorefrontHeader({ collections, isAdmin = false }: StorefrontHeaderProps) {
   return (
     <>
       <a
@@ -38,10 +39,15 @@ export function StorefrontHeader({ collections }: StorefrontHeaderProps) {
               <Heart className="h-5 w-5" />
             </HeaderIconLink>
             <CartDrawerTrigger />
+            {isAdmin && (
+              <HeaderIconLink href="/admin" label="Quản trị">
+                <LayoutDashboard className="h-5 w-5" />
+              </HeaderIconLink>
+            )}
             <HeaderIconLink href="/account" label="Tài khoản">
               <CircleUser className="h-5 w-5" />
             </HeaderIconLink>
-            <MobileNav collections={collections} />
+            <MobileNav collections={collections} isAdmin={isAdmin} />
           </div>
         </div>
       </header>
