@@ -130,10 +130,10 @@ pnpm dev
 | Language | Node |
 | Node version | `20` (via `.node-version` in repo) |
 
-**Build Command** — do **not** use `corepack enable` on Render (read-only filesystem):
+**Build Command** — do **not** use `corepack enable` on Render (read-only filesystem). Include devDependencies (`@nestjs/cli`, `typescript`) during install:
 
 ```bash
-npm install -g pnpm@9.15.9 && pnpm install --frozen-lockfile && pnpm --filter @storix/shared build && pnpm --filter @storix/api build
+npm install -g pnpm@9.15.9 && pnpm install --frozen-lockfile --prod=false && pnpm --filter @storix/shared build && pnpm --filter @storix/api build
 ```
 
 **Start Command:**
