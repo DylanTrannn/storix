@@ -11,7 +11,6 @@ import path from 'path';
 const BASE_URL = 'https://whosestudio.vn';
 const PRODUCTS_PER_COLLECTION = 5;
 const MAX_IMAGES_PER_PRODUCT = 4;
-const MAX_VARIANTS_PER_PRODUCT = 6;
 
 const COLLECTION_SOURCES = [
   { slug: 't-shirts', handle: 'ao-thun', name: 'T-Shirts', description: 'Essential tees and baby tees from Whose Studio.' },
@@ -19,8 +18,24 @@ const COLLECTION_SOURCES = [
   { slug: 'jackets', handle: 'jacket', name: 'Jackets', description: 'Outerwear including nylon jackets and windbreakers.' },
   { slug: 'accessories', handle: 'phu-kien', name: 'Accessories', description: 'Caps, scarves, and finishing touches.' },
   { slug: 'jeans', handle: 'wide-straights', name: 'Wide Straight Jeans', description: 'Wide and straight denim fits.' },
-  { slug: 'best-sellers', handle: 'hot-products', name: 'Best Sellers', description: 'Top picks from the Whose Studio catalog.' },
 ] as const;
+
+const BEST_SELLERS_SOURCE = {
+  slug: 'best-sellers',
+  name: 'Best Sellers',
+  description: 'Top picks from the Whose Studio catalog.',
+} as const;
+
+/** Curated slugs for best-sellers (cross-collection highlights). */
+const BEST_SELLER_SLUGS = [
+  'blinkstar-tshirt-black',
+  'bodyfit-tee',
+  'arch-hoodie-zip',
+  'airframe-jacket',
+  'wide-straight-jeans-dang-suong-black',
+] as const;
+
+const JUNK_HANDLE_PATTERN = /^(san-pham-test|nhan-ban-tu-san-pham-test)/;
 
 interface HaravanImage {
   src: string;
@@ -156,61 +171,67 @@ function parsePrice(value: string | null | undefined): number | undefined {
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
-function pickVariants(product: HaravanProduct): SeedProductVariant[] {
-  const sizeOption = product.options.find((o) => normalizeOptionKey(o.name) === 'size');
-  const colorOption = product.options.find((o) => normalizeOptionKey(o.name) === 'color');
+function optionsKey(options: Record<string, string>): string {
+  return Object.entries(options)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([k, v]) => `${k}:${v}`)
+    .join('|');
+}
 
-  let candidates = [...product.variants];
+const DEMO_INVENTORY_LEVELS = [15, 12, 10, 8, 20, 6];
 
-  if (sizeOption && colorOption) {
-    const sizes = sizeOption.values.slice(0, 2);
-    const colors = colorOption.values.slice(0, 3);
-    const picked: HaravanVariant[] = [];
-    for (const size of sizes) {
-      for (const color of colors) {
-        const match = candidates.find(
-          (v) =>
-            (v.option1 === size || v.option2 === size) &&
-            (v.option1 === color || v.option2 === color),
-        );
-        if (match) picked.push(match);
-      }
-    }
-    if (picked.length > 0) candidates = picked;
-  }
+/** Live store is often sold out; seed with varied demo stock for local dev. */
+function resolveInventory(variant: HaravanVariant, index: number): number {
+  if (variant.inventory_quantity > 0) return variant.inventory_quantity;
+  return DEMO_INVENTORY_LEVELS[index % DEMO_INVENTORY_LEVELS.length];
+}
 
-  const selected = candidates.slice(0, MAX_VARIANTS_PER_PRODUCT);
+function mapVariants(product: HaravanProduct): SeedProductVariant[] {
+  const seenOptionCombos = new Set<string>();
+  const usedSkus = new Set<string>();
+  const result: SeedProductVariant[] = [];
 
-  return selected.map((variant, index) => {
+  for (const [index, variant] of product.variants.entries()) {
     const options: Record<string, string> = {};
     product.options.forEach((opt, optIndex) => {
       const key = normalizeOptionKey(opt.name);
       const value =
-        optIndex === 0
-          ? variant.option1
-          : optIndex === 1
-            ? variant.option2
-            : variant.option3;
-      if (value) options[key] = value;
+        optIndex === 0 ? variant.option1 : optIndex === 1 ? variant.option2 : variant.option3;
+      if (value?.trim()) options[key] = value.trim();
     });
+
+    const comboKey = optionsKey(options);
+    if (seenOptionCombos.has(comboKey)) continue;
+    seenOptionCombos.add(comboKey);
 
     const skuParts = Object.values(options).map(slugifySkuPart);
     const baseSku = variant.sku?.trim();
-    const sku = baseSku
+    let sku = baseSku
       ? `WHS-${slugifySkuPart(product.handle)}-${baseSku}`
       : `WHS-${slugifySkuPart(product.handle)}-${skuParts.join('-') || String(index)}`;
+
+    if (usedSkus.has(sku)) {
+      sku = `${sku}-${index}`;
+    }
+    usedSkus.add(sku);
 
     const price = parsePrice(variant.price) ?? 0;
     const compareAtPrice = parsePrice(variant.compare_at_price);
 
-    return {
+    result.push({
       sku,
       price,
       ...(compareAtPrice && compareAtPrice > price ? { compareAtPrice } : {}),
-      inventory: Math.max(variant.inventory_quantity, variant.available ? 10 : 0),
+      inventory: resolveInventory(variant, result.length),
       options,
-    };
-  });
+    });
+  }
+
+  return result;
+}
+
+function isJunkProduct(product: HaravanProduct): boolean {
+  return JUNK_HANDLE_PATTERN.test(product.handle) || !product.images?.length;
 }
 
 function guessContentType(url: string): string {
@@ -302,7 +323,7 @@ async function transformProduct(
     images.push({
       url: uploaded.url,
       storageKey: uploaded.storageKey,
-      alt: img.alt || product.title,
+      alt: img.alt?.trim() || product.title,
       sortOrder: i,
     });
     console.log(`  image ${i + 1}/${Math.min(sortedImages.length, MAX_IMAGES_PER_PRODUCT)}`);
@@ -312,6 +333,11 @@ async function transformProduct(
     throw new Error(`Product "${product.title}" has no images`);
   }
 
+  const variants = mapVariants(product);
+  if (variants.length === 0) {
+    throw new Error(`Product "${product.title}" has no variants`);
+  }
+
   return {
     name: product.title,
     slug: product.handle,
@@ -319,7 +345,7 @@ async function transformProduct(
     status: 'active',
     metaTitle: `${product.title} | Whose Studio`,
     metaDescription: description.slice(0, 160),
-    variants: pickVariants(product),
+    variants,
     images,
   };
 }
@@ -378,8 +404,7 @@ async function main() {
   for (const source of COLLECTION_SOURCES) {
     console.log(`Fetching collection: ${source.name} (${source.handle})`);
     const haravanProducts = await fetchCollectionProducts(source.handle);
-    const withImages = haravanProducts.filter((p) => p.images?.length > 0);
-    const pool = withImages.length > 0 ? withImages : haravanProducts;
+    const pool = haravanProducts.filter((p) => !isJunkProduct(p));
     const productSlugs: string[] = [];
 
     for (const haravanProduct of pool) {
@@ -426,6 +451,23 @@ async function main() {
     console.log(`  → ${productSlugs.length} products linked\n`);
   }
 
+  const bestSellerSlugs = BEST_SELLER_SLUGS.filter((slug) => productsBySlug.has(slug)).slice(
+    0,
+    PRODUCTS_PER_COLLECTION,
+  );
+  const bestSellerHero = bestSellerSlugs[0]
+    ? productsBySlug.get(bestSellerSlugs[0])
+    : undefined;
+
+  collections.push({
+    name: BEST_SELLERS_SOURCE.name,
+    slug: BEST_SELLERS_SOURCE.slug,
+    description: BEST_SELLERS_SOURCE.description,
+    imageUrl: bestSellerHero?.images[0]?.url ?? '',
+    productSlugs: [...bestSellerSlugs],
+  });
+  console.log(`Best Sellers: ${bestSellerSlugs.length} curated products\n`);
+
   const products = Array.from(productsBySlug.values());
   const fixturePath = path.join(
     process.cwd(),
@@ -435,7 +477,8 @@ async function main() {
   fs.mkdirSync(path.dirname(fixturePath), { recursive: true });
   fs.writeFileSync(fixturePath, serializeFixture(products, collections), 'utf8');
 
-  console.log(`Done. ${products.length} products, ${collections.length} collections.`);
+  const variantCount = products.reduce((sum, p) => sum + p.variants.length, 0);
+  console.log(`Done. ${products.length} products, ${variantCount} variants, ${collections.length} collections.`);
   console.log(`Fixture written to ${fixturePath}`);
 }
 

@@ -50,5 +50,5 @@ export type BankCode = keyof typeof BANK_BINS;
 export const SORT_DIRECTIONS = ['asc', 'desc'] as const;
 export type SortDirection = (typeof SORT_DIRECTIONS)[number];
 
-export const PRODUCT_SORT_FIELDS = ['name', 'createdAt', 'price'] as const;
+export const PRODUCT_SORT_FIELDS = ['name', 'createdAt', 'updatedAt', 'price'] as const;
 export type ProductSortField = (typeof PRODUCT_SORT_FIELDS)[number];

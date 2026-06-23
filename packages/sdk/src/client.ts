@@ -28,6 +28,7 @@ import type {
   UpdateCollectionInput,
   UpdateOrderStatusInput,
   UpdateProductInput,
+  UpdateProductImageInput,
   UpdateProductVariantInput,
   UpdateProfileInput,
   User,
@@ -184,6 +185,16 @@ export function createStorixClient(config: StorixClientConfig) {
 
     reorderProductImages: (productId: string, data: ReorderProductImagesInput) =>
       request<ProductDetail>(`/products/${productId}/images/reorder`, {
+        method: 'PATCH',
+        body: data,
+      }),
+
+    updateProductImage: (
+      productId: string,
+      imageId: string,
+      data: UpdateProductImageInput,
+    ) =>
+      request<ProductDetail>(`/products/${productId}/images/${imageId}`, {
         method: 'PATCH',
         body: data,
       }),

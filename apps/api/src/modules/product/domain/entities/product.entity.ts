@@ -8,6 +8,7 @@ export class ProductImageEntity {
     public readonly storageKey: string,
     public readonly alt: string | null,
     public readonly sortOrder: number,
+    public readonly linkedOptions: Record<string, string> | null = null,
   ) {}
 }
 
@@ -35,6 +36,7 @@ export class ProductEntity {
     public readonly status: ProductStatus,
     public readonly metaTitle: string | null,
     public readonly metaDescription: string | null,
+    public readonly mediaOptionName: string | null,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
     public readonly images: ProductImageEntity[] = [],
@@ -61,6 +63,7 @@ export class ProductEntity {
       status: this.status,
       metaTitle: this.metaTitle,
       metaDescription: this.metaDescription,
+      mediaOptionName: this.mediaOptionName,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       images: primary ? [{ url: primary.url, alt: primary.alt }] : [],
@@ -78,6 +81,7 @@ export class ProductEntity {
         storageKey: img.storageKey,
         alt: img.alt,
         sortOrder: img.sortOrder,
+        linkedOptions: img.linkedOptions,
       })),
       variants: this.variants.map((v) => ({
         id: v.id,

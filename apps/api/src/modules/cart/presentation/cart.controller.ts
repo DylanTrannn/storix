@@ -79,7 +79,7 @@ export class CartController {
 
   @Patch('items/:itemId')
   @ApiCookieAuth('cart_session_id')
-  @ApiOperation({ summary: 'Update cart item quantity' })
+  @ApiOperation({ summary: 'Update cart item quantity or variant' })
   updateItem(
     @Req() req: Request,
     @Param('itemId') itemId: string,

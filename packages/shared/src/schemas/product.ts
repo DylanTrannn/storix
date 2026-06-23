@@ -8,6 +8,7 @@ export const ProductImageSchema = z.object({
   storageKey: z.string(),
   alt: z.string().optional().nullable(),
   sortOrder: z.number().int(),
+  linkedOptions: z.record(z.string()).optional().nullable(),
 });
 
 export const ProductVariantSchema = z.object({
@@ -31,6 +32,7 @@ export const ProductSchema = z.object({
   status: z.enum(PRODUCT_STATUSES),
   metaTitle: z.string().optional().nullable(),
   metaDescription: z.string().optional().nullable(),
+  mediaOptionName: z.string().optional().nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 });
@@ -65,6 +67,7 @@ export const CreateProductSchema = z.object({
   status: z.enum(PRODUCT_STATUSES).optional(),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
+  mediaOptionName: z.string().optional().nullable(),
 });
 
 export const UpdateProductSchema = CreateProductSchema.partial();
@@ -75,7 +78,7 @@ export const CreateProductVariantSchema = z.object({
   compareAtPrice: z.number().int().positive().optional(),
   inventory: z.number().int().min(0).default(0),
   options: z.record(z.string()).optional(),
-  imageUrl: z.string().url().optional(),
+  imageUrl: z.string().url().optional().nullable(),
 });
 
 export const UpdateProductVariantSchema = CreateProductVariantSchema.partial();
@@ -85,6 +88,12 @@ export const CreateProductImageSchema = z.object({
   storageKey: z.string().min(1),
   alt: z.string().optional(),
   sortOrder: z.number().int().optional(),
+  linkedOptions: z.record(z.string()).optional().nullable(),
+});
+
+export const UpdateProductImageSchema = z.object({
+  alt: z.string().optional().nullable(),
+  linkedOptions: z.record(z.string()).optional().nullable(),
 });
 
 export type Product = z.infer<typeof ProductSchema>;
@@ -97,3 +106,4 @@ export type UpdateProductInput = z.infer<typeof UpdateProductSchema>;
 export type CreateProductVariantInput = z.infer<typeof CreateProductVariantSchema>;
 export type UpdateProductVariantInput = z.infer<typeof UpdateProductVariantSchema>;
 export type CreateProductImageInput = z.infer<typeof CreateProductImageSchema>;
+export type UpdateProductImageInput = z.infer<typeof UpdateProductImageSchema>;

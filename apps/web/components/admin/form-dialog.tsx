@@ -11,6 +11,7 @@ interface AdminFormDialogProps {
   onOpenChange?: (open: boolean) => void;
   title: string;
   description?: string;
+  maxWidthClass?: string;
   children: (props: { onSuccess: () => void; onCancel: () => void }) => ReactNode;
 }
 
@@ -20,6 +21,7 @@ export function AdminFormDialog({
   onOpenChange,
   title,
   description,
+  maxWidthClass = 'max-w-2xl',
   children,
 }: AdminFormDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
@@ -78,7 +80,7 @@ export function AdminFormDialog({
               aria-modal="true"
               aria-labelledby={titleId}
               aria-describedby={description ? descriptionId : undefined}
-              className="relative z-10 grid w-full max-w-2xl max-h-[90vh] gap-4 overflow-y-auto rounded-lg border border-border bg-background p-6 text-foreground shadow-lg"
+              className={`relative z-10 grid w-full ${maxWidthClass} max-h-[90vh] gap-4 overflow-y-auto rounded-lg border border-border bg-background p-6 text-foreground shadow-lg`}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1.5 text-left">

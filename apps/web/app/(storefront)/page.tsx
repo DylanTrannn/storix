@@ -14,10 +14,17 @@ const trustBadges = [
 ];
 
 export default async function HomePage() {
-  const [collections, products] = await Promise.all([
-    getFeaturedCollections(3),
-    getFeaturedProducts(8),
-  ]);
+  let collections: Awaited<ReturnType<typeof getFeaturedCollections>> = [];
+  let products: Awaited<ReturnType<typeof getFeaturedProducts>> = [];
+
+  try {
+    [collections, products] = await Promise.all([
+      getFeaturedCollections(3),
+      getFeaturedProducts(8),
+    ]);
+  } catch {
+    // API may still be starting in dev — render page shell without featured data.
+  }
 
   const heroImageUrl =
     collections.find((c) => c.imageUrl)?.imageUrl ??

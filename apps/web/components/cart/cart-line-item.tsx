@@ -1,16 +1,21 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import type { CartItem } from '@storix/shared';
 import { Button } from '@storix/ui/button';
-import { Input } from '@storix/ui/input';
-import { cn, formatPrice, getVariantLabel } from '@/lib/utils';
+import { cn, formatPrice } from '@/lib/utils';
+import {
+  findVariantByOptions,
+  hasMultipleVariants,
+} from '@/lib/product/variants';
 import {
   removeStorefrontCartItem,
   updateStorefrontCartItem,
 } from '@/lib/api/storefront';
+import { QuantityInput } from '@/components/product/quantity-input';
+import { VariantOptionPicker } from '@/components/product/variant-option-picker';
 
 interface CartLineItemProps {
   item: CartItem;
@@ -19,73 +24,79 @@ interface CartLineItemProps {
 }
 
 export function CartLineItem({ item, onUpdated, className }: CartLineItemProps) {
-  const [quantity, setQuantity] = useState(String(item.quantity));
+  const [quantity, setQuantity] = useState(item.quantity);
+  const [selection, setSelection] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const variant = item.variant;
-  const maxQuantity = variant?.inventory && variant.inventory > 0 ? variant.inventory : 99;
+  const productVariants = item.productVariants ?? [];
   const productName = variant?.product.name ?? 'Product';
   const unitPrice = variant?.price ?? 0;
   const imageUrl = variant?.imageUrl;
-  const variantLabel = variant ? getVariantLabel(variant.options) : null;
+  const maxQuantity = variant?.inventory && variant.inventory > 0 ? variant.inventory : 99;
+
+  const pickerVariants = useMemo(
+    () =>
+      productVariants.map((v) => ({
+        id: v.id,
+        options: v.options,
+        inventory: v.inventory,
+        price: v.price,
+        imageUrl: v.imageUrl,
+      })),
+    [productVariants],
+  );
 
   useEffect(() => {
-    setQuantity(String(item.quantity));
+    setQuantity(item.quantity);
   }, [item.quantity]);
 
-  function validateQuantity(value: string): number | null {
-    const trimmed = value.trim();
-    if (!trimmed) {
-      setError('Enter a quantity');
-      return null;
+  useEffect(() => {
+    if (variant?.options) {
+      setSelection(variant.options);
     }
+  }, [variant?.options, item.variantId]);
 
-    const parsed = Number(trimmed);
-    if (!Number.isInteger(parsed)) {
-      setError('Quantity must be a whole number');
-      return null;
-    }
-    if (parsed < 1) {
-      setError('Minimum quantity is 1');
-      return null;
-    }
-    if (parsed > maxQuantity) {
-      setError(`Maximum available is ${maxQuantity}`);
-      return null;
-    }
+  async function handleVariantSelectionChange(nextSelection: Record<string, string>) {
+    setSelection(nextSelection);
+    const nextVariant = findVariantByOptions(pickerVariants, nextSelection);
+    if (!nextVariant || nextVariant.id === item.variantId) return;
 
+    setIsLoading(true);
     setError(null);
-    return parsed;
+    try {
+      await updateStorefrontCartItem(item.id, { variantId: nextVariant.id });
+      onUpdated?.();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Could not update variant';
+      setError(message);
+      if (variant?.options) setSelection(variant.options);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function commitQuantity(nextQuantity: number) {
     if (nextQuantity === item.quantity) return;
 
     setIsLoading(true);
+    setError(null);
     try {
       await updateStorefrontCartItem(item.id, { quantity: nextQuantity });
       onUpdated?.();
-    } catch {
-      setError('Could not update quantity');
-      setQuantity(String(item.quantity));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Could not update quantity';
+      setError(message);
+      setQuantity(item.quantity);
     } finally {
       setIsLoading(false);
     }
   }
 
-  function handleQuantityBlur() {
-    const parsed = validateQuantity(quantity);
-    if (parsed === null) {
-      setQuantity(String(item.quantity));
-      return;
-    }
-    commitQuantity(parsed);
-  }
-
-  function handleQuantityChange(value: string) {
-    setQuantity(value);
-    if (error) validateQuantity(value);
+  function handleQuantityChange(nextQuantity: number) {
+    setQuantity(nextQuantity);
+    void commitQuantity(nextQuantity);
   }
 
   async function handleRemove() {
@@ -99,6 +110,9 @@ export function CartLineItem({ item, onUpdated, className }: CartLineItemProps) 
       setIsLoading(false);
     }
   }
+
+  const showVariantPicker =
+    pickerVariants.length > 0 && hasMultipleVariants(pickerVariants);
 
   return (
     <li className={cn('flex gap-3', className)}>
@@ -122,9 +136,6 @@ export function CartLineItem({ item, onUpdated, className }: CartLineItemProps) 
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <p className="truncate font-medium">{productName}</p>
-            {variantLabel && (
-              <p className="text-xs text-muted-foreground">{variantLabel}</p>
-            )}
             <p className="mt-1 text-sm text-muted-foreground">
               {formatPrice(unitPrice)} each
             </p>
@@ -134,22 +145,24 @@ export function CartLineItem({ item, onUpdated, className }: CartLineItemProps) 
           </p>
         </div>
 
+        {showVariantPicker && (
+          <div className="mt-3">
+            <VariantOptionPicker
+              variants={pickerVariants}
+              selection={selection}
+              onSelectionChange={handleVariantSelectionChange}
+              compact
+            />
+          </div>
+        )}
+
         <div className="mt-3 flex items-center gap-2">
-          <label htmlFor={`cart-qty-${item.id}`} className="sr-only">
-            Quantity for {productName}
-          </label>
-          <Input
-            id={`cart-qty-${item.id}`}
-            type="number"
-            min={1}
-            max={maxQuantity}
-            step={1}
+          <QuantityInput
             value={quantity}
+            onChange={handleQuantityChange}
+            max={maxQuantity}
             disabled={isLoading}
-            onChange={(e) => handleQuantityChange(e.target.value)}
-            onBlur={handleQuantityBlur}
-            className="h-9 w-20 bg-background"
-            aria-invalid={error ? true : undefined}
+            compact
           />
           <Button
             type="button"

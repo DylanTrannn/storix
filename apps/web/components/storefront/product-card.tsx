@@ -1,50 +1,22 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
-import type { Collection, ProductPublic } from '@storix/shared';
-import { formatPrice, getProductMinPrice } from '@/lib/utils';
+import type { Collection } from '@storix/shared';
+import { ProductCardItem, type ProductCardProduct } from '@/components/storefront/product-card-item';
 
-interface ProductCardProps {
-  product: ProductPublic & { variants?: { price: number }[] };
-}
-
-export function ProductCard({ product }: ProductCardProps) {
-  const image = product.images?.[0];
-  const minPrice =
-    product.minPrice ?? (product.variants ? getProductMinPrice(product.variants) : null);
+export function ProductGrid({ products }: { products: ProductCardProduct[] }) {
+  if (products.length === 0) {
+    return (
+      <p className="py-16 text-center text-muted-foreground">No products found.</p>
+    );
+  }
 
   return (
-    <Link href={`/products/${product.slug}`} className="group block cursor-pointer">
-      <article className="overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-lg">
-        <div className="relative aspect-[4/5] overflow-hidden bg-muted">
-          {image ? (
-            <Image
-              src={image.url}
-              alt={image.alt ?? product.name}
-              fill
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-              No image
-            </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-900/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <div className="absolute bottom-3 right-3 flex h-9 w-9 translate-y-2 items-center justify-center rounded-full bg-primary text-primary-foreground opacity-0 shadow-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-            <ArrowUpRight className="h-4 w-4" />
-          </div>
-        </div>
-        <div className="p-4">
-          <h3 className="font-medium leading-snug text-foreground transition-colors duration-200 group-hover:text-primary">
-            {product.name}
-          </h3>
-          {minPrice !== null && (
-            <p className="mt-1.5 text-sm font-semibold text-primary">{formatPrice(minPrice)}</p>
-          )}
-        </div>
-      </article>
-    </Link>
+    <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+      {products.map((product) => (
+        <ProductCardItem key={product.id} product={product} />
+      ))}
+    </div>
   );
 }
 
@@ -83,22 +55,6 @@ export function CollectionCard({ collection }: CollectionCardProps) {
         </div>
       </article>
     </Link>
-  );
-}
-
-export function ProductGrid({ products }: { products: ProductCardProps['product'][] }) {
-  if (products.length === 0) {
-    return (
-      <p className="py-16 text-center text-muted-foreground">No products found.</p>
-    );
-  }
-
-  return (
-    <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
-    </div>
   );
 }
 

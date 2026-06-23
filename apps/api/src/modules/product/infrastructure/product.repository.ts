@@ -16,6 +16,7 @@ import type {
   CreateProductVariantInput,
   PaginatedResponse,
   ProductListQuery,
+  UpdateProductImageInput,
   UpdateProductInput,
   UpdateProductVariantInput,
 } from '@storix/shared';
@@ -73,6 +74,7 @@ export class ProductRepository implements IProductRepository {
           img.storageKey ?? '',
           img.alt,
           img.sortOrder,
+          img.linkedOptions ?? null,
         ),
       );
     }
@@ -107,6 +109,7 @@ export class ProductRepository implements IProductRepository {
       row.status,
       row.metaTitle,
       row.metaDescription,
+      row.mediaOptionName ?? null,
       row.createdAt,
       row.updatedAt,
       relations?.images ?? [],
@@ -163,9 +166,13 @@ export class ProductRepository implements IProductRepository {
           ? direction === 'desc'
             ? desc(min(productVariants.price))
             : asc(min(productVariants.price))
-          : direction === 'desc'
-            ? desc(products.createdAt)
-            : asc(products.createdAt);
+          : sort === 'updatedAt'
+            ? direction === 'desc'
+              ? desc(products.updatedAt)
+              : asc(products.updatedAt)
+            : direction === 'desc'
+              ? desc(products.createdAt)
+              : asc(products.createdAt);
 
     let rows: (typeof products.$inferSelect)[];
     let total: number;
@@ -220,6 +227,7 @@ export class ProductRepository implements IProductRepository {
         status: data.status ?? 'draft',
         metaTitle: data.metaTitle,
         metaDescription: data.metaDescription,
+        mediaOptionName: data.mediaOptionName ?? null,
       })
       .returning();
     return this.toEntity(row);
@@ -286,6 +294,7 @@ export class ProductRepository implements IProductRepository {
       storageKey: data.storageKey,
       alt: data.alt,
       sortOrder: data.sortOrder ?? 0,
+      linkedOptions: data.linkedOptions ?? null,
     });
     return this.findById(productId);
   }
@@ -302,6 +311,7 @@ export class ProductRepository implements IProductRepository {
           storageKey: img.storageKey,
           alt: img.alt,
           sortOrder: img.sortOrder ?? index,
+          linkedOptions: img.linkedOptions ?? null,
         })),
       );
     }
@@ -330,6 +340,18 @@ export class ProductRepository implements IProductRepository {
       .where(and(eq(productImages.id, imageId), eq(productImages.productId, productId)))
       .limit(1);
     return row ?? null;
+  }
+
+  async updateImage(
+    productId: string,
+    imageId: string,
+    data: UpdateProductImageInput,
+  ): Promise<ProductEntity | null> {
+    await this.db
+      .update(productImages)
+      .set(data)
+      .where(and(eq(productImages.id, imageId), eq(productImages.productId, productId)));
+    return this.findById(productId);
   }
 
   async deleteImage(productId: string, imageId: string): Promise<ProductEntity | null> {

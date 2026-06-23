@@ -1,3 +1,15 @@
+export const ADMIN_PAGE_SIZES = [10, 20, 50, 100] as const;
+
+export type AdminPageSize = (typeof ADMIN_PAGE_SIZES)[number];
+
+export function parseAdminPageSizeParam(value: string | undefined): AdminPageSize {
+  const parsed = Number(value);
+  if (ADMIN_PAGE_SIZES.includes(parsed as AdminPageSize)) {
+    return parsed as AdminPageSize;
+  }
+  return 10;
+}
+
 export function parsePageParam(value: string | undefined): number {
   const parsed = Number(value);
   if (!Number.isFinite(parsed) || parsed < 1) return 1;

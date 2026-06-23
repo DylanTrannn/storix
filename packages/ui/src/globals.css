@@ -48,7 +48,7 @@
 /* ─── Select dropdown (explicit CSS — do not rely on Tailwind scan for portal content) ─── */
 .select-content-popper {
   position: relative;
-  z-index: 50;
+  z-index: 250;
   overflow: hidden;
   width: var(--radix-select-trigger-width);
   min-width: var(--radix-select-trigger-width);

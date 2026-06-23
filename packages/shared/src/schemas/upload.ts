@@ -21,6 +21,7 @@ export const BatchCreateProductImagesSchema = z.object({
         storageKey: z.string().min(1),
         alt: z.string().optional(),
         sortOrder: z.number().int().optional(),
+        linkedOptions: z.record(z.string()).optional().nullable(),
       }),
     )
     .min(1)

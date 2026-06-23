@@ -13,6 +13,13 @@ export class CartItemEntity {
       imageUrl: string | null;
       product: { id: string; name: string; slug: string };
     },
+    public readonly productVariants?: Array<{
+      id: string;
+      options: Record<string, string>;
+      price: number;
+      inventory: number;
+      imageUrl: string | null;
+    }>,
   ) {}
 }
 
@@ -37,6 +44,7 @@ export class CartEntity {
         variantId: item.variantId,
         quantity: item.quantity,
         variant: item.variant,
+        productVariants: item.productVariants,
       })),
       subtotal: this.subtotal,
       itemCount: this.itemCount,

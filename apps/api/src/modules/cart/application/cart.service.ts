@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import type Redis from 'ioredis';
 import type { AddToCartInput, UpdateCartItemInput } from '@storix/shared';
 import { randomUUID } from 'crypto';
@@ -6,6 +6,10 @@ import { REDIS_CLIENT } from '@/infrastructure/redis/redis.provider';
 import type { CartEntity } from '../domain/entities/cart.entity';
 import type { ICartRepository } from '../domain/repositories/cart.repository.interface';
 import { CART_REPOSITORY } from '../domain/repositories/cart.repository.interface';
+import {
+  InsufficientInventoryError,
+  InvalidVariantChangeError,
+} from '../domain/errors/cart.errors';
 
 const CART_CACHE_TTL = 60 * 60;
 export const SESSION_COOKIE = 'cart_session_id';
@@ -52,13 +56,20 @@ export class CartService {
 
   async addItem(userId: string | undefined, sessionId: string | undefined, input: AddToCartInput) {
     const { cart } = await this.getOrCreateCart(userId, sessionId);
-    const updated = await this.cartRepository.addItem(cart.id, input);
-    if (!updated) {
-      throw new NotFoundException('Cart not found');
+    try {
+      const updated = await this.cartRepository.addItem(cart.id, input);
+      if (!updated) {
+        throw new NotFoundException('Cart not found');
+      }
+      const publicCart = updated.toPublic();
+      await this.cacheCart(publicCart);
+      return publicCart;
+    } catch (error) {
+      if (error instanceof InsufficientInventoryError || error instanceof InvalidVariantChangeError) {
+        throw new BadRequestException(error.message);
+      }
+      throw error;
     }
-    const publicCart = updated.toPublic();
-    await this.cacheCart(publicCart);
-    return publicCart;
   }
 
   async updateItem(
@@ -68,13 +79,20 @@ export class CartService {
     input: UpdateCartItemInput,
   ) {
     const { cart } = await this.getOrCreateCart(userId, sessionId);
-    const updated = await this.cartRepository.updateItem(cart.id, itemId, input);
-    if (!updated) {
-      throw new NotFoundException('Cart item not found');
+    try {
+      const updated = await this.cartRepository.updateItem(cart.id, itemId, input);
+      if (!updated) {
+        throw new NotFoundException('Cart item not found');
+      }
+      const publicCart = updated.toPublic();
+      await this.cacheCart(publicCart);
+      return publicCart;
+    } catch (error) {
+      if (error instanceof InsufficientInventoryError || error instanceof InvalidVariantChangeError) {
+        throw new BadRequestException(error.message);
+      }
+      throw error;
     }
-    const publicCart = updated.toPublic();
-    await this.cacheCart(publicCart);
-    return publicCart;
   }
 
   async removeItem(userId: string | undefined, sessionId: string | undefined, itemId: string) {

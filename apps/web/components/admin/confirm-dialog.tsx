@@ -39,10 +39,12 @@ export function AdminConfirmDialog({
     setPending(true);
     try {
       await onConfirm();
-      onOpenChange(false);
     } catch {
+      return;
+    } finally {
       setPending(false);
     }
+    onOpenChange(false);
   }
 
   return (

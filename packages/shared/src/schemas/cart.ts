@@ -1,5 +1,13 @@
 import { z } from 'zod';
 
+export const CartProductVariantSchema = z.object({
+  id: z.string().uuid(),
+  options: z.record(z.string()),
+  price: z.number().int(),
+  inventory: z.number().int().min(0),
+  imageUrl: z.string().url().nullable().optional(),
+});
+
 export const CartItemSchema = z.object({
   id: z.string().uuid(),
   cartId: z.string().uuid(),
@@ -20,6 +28,7 @@ export const CartItemSchema = z.object({
       }),
     })
     .optional(),
+  productVariants: z.array(CartProductVariantSchema).optional(),
 });
 
 export const CartSchema = z.object({
@@ -36,11 +45,17 @@ export const AddToCartSchema = z.object({
   quantity: z.number().int().positive().default(1),
 });
 
-export const UpdateCartItemSchema = z.object({
-  quantity: z.number().int().positive(),
-});
+export const UpdateCartItemSchema = z
+  .object({
+    quantity: z.number().int().positive().optional(),
+    variantId: z.string().uuid().optional(),
+  })
+  .refine((data) => data.quantity !== undefined || data.variantId !== undefined, {
+    message: 'At least one of quantity or variantId is required',
+  });
 
 export type Cart = z.infer<typeof CartSchema>;
 export type CartItem = z.infer<typeof CartItemSchema>;
+export type CartProductVariant = z.infer<typeof CartProductVariantSchema>;
 export type AddToCartInput = z.infer<typeof AddToCartSchema>;
 export type UpdateCartItemInput = z.infer<typeof UpdateCartItemSchema>;

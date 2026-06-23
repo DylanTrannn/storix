@@ -29,6 +29,20 @@
       "when": 1781704287000,
       "tag": "0003_drop_store_locations",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1781704288000,
+      "tag": "0004_media_option_images",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1781704289000,
+      "tag": "0005_product_variant_sku_per_product",
+      "breakpoints": true
     }
   ]
 }

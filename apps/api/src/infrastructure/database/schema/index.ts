@@ -76,6 +76,7 @@ export const products = pgTable(
     taxonomyCategoryId: varchar('taxonomy_category_id', { length: 255 }),
     taxonomyCategoryPath: text('taxonomy_category_path'),
     categoryAttributes: jsonb('category_attributes').$type<Record<string, string | string[]>>(),
+    mediaOptionName: varchar('media_option_name', { length: 100 }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
@@ -97,6 +98,7 @@ export const productImages = pgTable(
     storageKey: text('storage_key').notNull().default(''),
     alt: varchar('alt', { length: 255 }),
     sortOrder: integer('sort_order').notNull().default(0),
+    linkedOptions: jsonb('linked_options').$type<Record<string, string>>(),
   },
   (table) => [index('product_images_product_id_idx').on(table.productId)],
 );
@@ -108,7 +110,7 @@ export const productVariants = pgTable(
     productId: uuid('product_id')
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
-    sku: varchar('sku', { length: 100 }).notNull().unique(),
+    sku: varchar('sku', { length: 100 }).notNull(),
     price: integer('price').notNull(),
     compareAtPrice: integer('compare_at_price'),
     inventory: integer('inventory').notNull().default(0),
@@ -117,7 +119,10 @@ export const productVariants = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [index('product_variants_product_id_idx').on(table.productId)],
+  (table) => [
+    index('product_variants_product_id_idx').on(table.productId),
+    uniqueIndex('product_variants_product_id_sku_unique').on(table.productId, table.sku),
+  ],
 );
 
 export const collections = pgTable(

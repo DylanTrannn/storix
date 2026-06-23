@@ -61,6 +61,24 @@ export const whoseStudioProducts: SeedProduct[] = [
           "color": "Đen",
           "size": "M"
         }
+      },
+      {
+        "sku": "WHS-BLINKSTAR-TSHIRT-BLA-SP008001",
+        "price": 240000,
+        "inventory": 0,
+        "options": {
+          "color": "Đen",
+          "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-BLINKSTAR-TSHIRT-BLA-SP008006",
+        "price": 240000,
+        "inventory": 0,
+        "options": {
+          "color": "Đen",
+          "size": "XL"
+        }
       }
     ],
     "images": [
@@ -108,6 +126,24 @@ export const whoseStudioProducts: SeedProduct[] = [
         "options": {
           "color": "Đỏ",
           "size": "M"
+        }
+      },
+      {
+        "sku": "WHS-BLINKSTAR-TSHIRT-RED-SP008001",
+        "price": 240000,
+        "inventory": 0,
+        "options": {
+          "color": "Đỏ",
+          "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-BLINKSTAR-TSHIRT-RED-SP008006",
+        "price": 240000,
+        "inventory": 0,
+        "options": {
+          "color": "Đỏ",
+          "size": "XL"
         }
       }
     ],
@@ -163,6 +199,24 @@ export const whoseStudioProducts: SeedProduct[] = [
           "color": "Tiêu đậm",
           "size": "M"
         }
+      },
+      {
+        "sku": "WHS-BLINKSTAR-TSHIRT-TIE-SP008001",
+        "price": 240000,
+        "inventory": 0,
+        "options": {
+          "color": "Tiêu đậm",
+          "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-BLINKSTAR-TSHIRT-TIE-SP008006",
+        "price": 240000,
+        "inventory": 0,
+        "options": {
+          "color": "Tiêu đậm",
+          "size": "XL"
+        }
       }
     ],
     "images": [
@@ -216,6 +270,24 @@ export const whoseStudioProducts: SeedProduct[] = [
         "options": {
           "color": "Trắng",
           "size": "M"
+        }
+      },
+      {
+        "sku": "WHS-BLINKSTAR-TSHIRT-WHI-SP008001",
+        "price": 240000,
+        "inventory": 0,
+        "options": {
+          "color": "Trắng",
+          "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-BLINKSTAR-TSHIRT-WHI-SP008006",
+        "price": 240000,
+        "inventory": 0,
+        "options": {
+          "color": "Trắng",
+          "size": "XL"
         }
       }
     ],
@@ -275,7 +347,7 @@ export const whoseStudioProducts: SeedProduct[] = [
       {
         "sku": "WHS-BODYFIT-TEE-SP009489",
         "price": 180000,
-        "inventory": 10,
+        "inventory": 5,
         "options": {
           "color": "TRẮNG",
           "size": "M"
@@ -284,7 +356,7 @@ export const whoseStudioProducts: SeedProduct[] = [
       {
         "sku": "WHS-BODYFIT-TEE-SP009490",
         "price": 180000,
-        "inventory": 10,
+        "inventory": 1,
         "options": {
           "color": "Đen",
           "size": "L"
@@ -293,7 +365,7 @@ export const whoseStudioProducts: SeedProduct[] = [
       {
         "sku": "WHS-BODYFIT-TEE-SP009491",
         "price": 180000,
-        "inventory": 10,
+        "inventory": 2,
         "options": {
           "color": "Xám tiêu đậm",
           "size": "L"
@@ -302,10 +374,37 @@ export const whoseStudioProducts: SeedProduct[] = [
       {
         "sku": "WHS-BODYFIT-TEE-SP009492",
         "price": 180000,
-        "inventory": 10,
+        "inventory": 2,
         "options": {
           "color": "TRẮNG",
           "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-BODYFIT-TEE-SP009493",
+        "price": 180000,
+        "inventory": 0,
+        "options": {
+          "color": "Đen",
+          "size": "XL"
+        }
+      },
+      {
+        "sku": "WHS-BODYFIT-TEE-SP009494",
+        "price": 180000,
+        "inventory": 8,
+        "options": {
+          "color": "Xám tiêu đậm",
+          "size": "XL"
+        }
+      },
+      {
+        "sku": "WHS-BODYFIT-TEE-SP009495",
+        "price": 180000,
+        "inventory": 2,
+        "options": {
+          "color": "TRẮNG",
+          "size": "XL"
         }
       }
     ],
@@ -336,30 +435,192 @@ export const whoseStudioProducts: SeedProduct[] = [
         }
       },
       {
-        "sku": "WHS-507-HDZ-SYMBOL-SP008891",
+        "sku": "WHS-507-HDZ-SYMBOL-SP008892",
+        "price": 250000,
+        "inventory": 22,
+        "options": {
+          "color": "Navy",
+          "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008893",
+        "price": 280000,
+        "inventory": 30,
+        "options": {
+          "color": "Navy",
+          "size": "XL"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP020374",
+        "price": 250000,
+        "inventory": 14,
+        "options": {
+          "color": "L",
+          "size": "Nâu Đỏ"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008901",
+        "price": 250000,
+        "inventory": 20,
+        "options": {
+          "color": "L",
+          "size": "ĐEN"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008900",
         "price": 250000,
         "inventory": 0,
         "options": {
-          "color": "Navy",
-          "size": "M"
+          "color": "M",
+          "size": "ĐEN"
         }
       },
       {
-        "sku": "WHS-507-HDZ-SYMBOL-SP008892",
+        "sku": "WHS-507-HDZ-SYMBOL-SP020317",
         "price": 250000,
-        "inventory": 22,
+        "inventory": 2,
         "options": {
-          "color": "Navy",
-          "size": "L"
+          "color": "M",
+          "size": "NAVY"
         }
       },
       {
-        "sku": "WHS-507-HDZ-SYMBOL-SP008892",
+        "sku": "WHS-507-HDZ-SYMBOL-SP008905",
         "price": 250000,
-        "inventory": 22,
+        "inventory": 16,
         "options": {
-          "color": "Navy",
-          "size": "L"
+          "color": "XL",
+          "size": "XÁM TIÊU ĐẬM"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008894",
+        "price": 250000,
+        "inventory": 3,
+        "options": {
+          "color": "M",
+          "size": "MOSSGREEN"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008904",
+        "price": 250000,
+        "inventory": 15,
+        "options": {
+          "color": "L",
+          "size": "XÁM TIÊU ĐẬM"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008895",
+        "price": 250000,
+        "inventory": 7,
+        "options": {
+          "color": "L",
+          "size": "MOSSGREEN"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008909",
+        "price": 250000,
+        "inventory": 9,
+        "options": {
+          "color": "M",
+          "size": "XÁM TIÊU NHẠT"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008907",
+        "price": 250000,
+        "inventory": 0,
+        "options": {
+          "color": "L",
+          "size": "KEM"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008914",
+        "price": 250000,
+        "inventory": 0,
+        "options": {
+          "color": "XL",
+          "size": "BLUE GREY"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008902",
+        "price": 250000,
+        "inventory": 0,
+        "options": {
+          "color": "XL",
+          "size": "ĐEN"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008911",
+        "price": 250000,
+        "inventory": 0,
+        "options": {
+          "color": "XL",
+          "size": "XÁM TIÊU NHẠT"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008910",
+        "price": 250000,
+        "inventory": 13,
+        "options": {
+          "color": "L",
+          "size": "XÁM TIÊU NHẠT"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP020373",
+        "price": 250000,
+        "inventory": 13,
+        "options": {
+          "color": "M",
+          "size": "Nâu Đỏ"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP020319",
+        "price": 250000,
+        "inventory": 17,
+        "options": {
+          "color": "XL",
+          "size": "NAVY"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008908",
+        "price": 250000,
+        "inventory": 0,
+        "options": {
+          "color": "XL",
+          "size": "KEM"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008898",
+        "price": 250000,
+        "inventory": 0,
+        "options": {
+          "color": "L",
+          "size": "XÁM CHÌ"
+        }
+      },
+      {
+        "sku": "WHS-507-HDZ-SYMBOL-SP008903",
+        "price": 250000,
+        "inventory": 12,
+        "options": {
+          "color": "M",
+          "size": "XÁM TIÊU ĐẬM"
         }
       }
     ],
@@ -401,7 +662,7 @@ export const whoseStudioProducts: SeedProduct[] = [
       {
         "sku": "WHS-ARCH-HOODIE-ZIP-SP020346",
         "price": 320000,
-        "inventory": 10,
+        "inventory": 2,
         "options": {
           "color": "Đen",
           "size": "M"
@@ -410,19 +671,37 @@ export const whoseStudioProducts: SeedProduct[] = [
       {
         "sku": "WHS-ARCH-HOODIE-ZIP-SP020347",
         "price": 320000,
-        "inventory": 10,
+        "inventory": 9,
         "options": {
           "color": "Đen",
           "size": "L"
         }
       },
       {
+        "sku": "WHS-ARCH-HOODIE-ZIP-SP020348",
+        "price": 320000,
+        "inventory": 3,
+        "options": {
+          "color": "Đen",
+          "size": "XL"
+        }
+      },
+      {
         "sku": "WHS-ARCH-HOODIE-ZIP-SP020350",
         "price": 320000,
-        "inventory": 10,
+        "inventory": 4,
         "options": {
           "color": "Xám tiêu đậm",
           "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-ARCH-HOODIE-ZIP-SP020354",
+        "price": 320000,
+        "inventory": 12,
+        "options": {
+          "color": "Xám Tiêu Nhạt",
+          "size": "XL"
         }
       }
     ],
@@ -478,6 +757,24 @@ export const whoseStudioProducts: SeedProduct[] = [
           "color": "Xám tiêu đậm",
           "size": "M"
         }
+      },
+      {
+        "sku": "WHS-ARCH-HOODIE-ZIP-TIEU-XAM-TIEU-AM-L",
+        "price": 320000,
+        "inventory": 0,
+        "options": {
+          "color": "Xám tiêu đậm",
+          "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-ARCH-HOODIE-ZIP-TIEU-XAM-TIEU-AM-XL",
+        "price": 320000,
+        "inventory": 0,
+        "options": {
+          "color": "Xám tiêu đậm",
+          "size": "XL"
+        }
       }
     ],
     "images": [
@@ -531,6 +828,15 @@ export const whoseStudioProducts: SeedProduct[] = [
         "options": {
           "color": "Xám tiêu nhạt",
           "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-ARCH-HOODIE-ZIP-TIEU-SP020348",
+        "price": 320000,
+        "inventory": 0,
+        "options": {
+          "color": "Xám tiêu nhạt",
+          "size": "XL"
         }
       }
     ],
@@ -586,6 +892,15 @@ export const whoseStudioProducts: SeedProduct[] = [
           "color": "Black",
           "size": "L"
         }
+      },
+      {
+        "sku": "WHS-BLANK-SWEATER-PREMIU-BLACK-XL",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Black",
+          "size": "XL"
+        }
       }
     ],
     "images": [
@@ -634,26 +949,6 @@ export const whoseStudioProducts: SeedProduct[] = [
         }
       },
       {
-        "sku": "WHS-AIRFRAME-JACKET-BEIGE-M",
-        "price": 409000,
-        "compareAtPrice": 500000,
-        "inventory": 0,
-        "options": {
-          "color": "Beige",
-          "size": "M"
-        }
-      },
-      {
-        "sku": "WHS-AIRFRAME-JACKET-WHITE-M",
-        "price": 409000,
-        "compareAtPrice": 500000,
-        "inventory": 0,
-        "options": {
-          "color": "White",
-          "size": "M"
-        }
-      },
-      {
         "sku": "WHS-AIRFRAME-JACKET-BLACK-L",
         "price": 409000,
         "compareAtPrice": 500000,
@@ -661,6 +956,26 @@ export const whoseStudioProducts: SeedProduct[] = [
         "options": {
           "color": "BLACK",
           "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-AIRFRAME-JACKET-BLACK-XL",
+        "price": 409000,
+        "compareAtPrice": 500000,
+        "inventory": 0,
+        "options": {
+          "color": "BLACK",
+          "size": "XL"
+        }
+      },
+      {
+        "sku": "WHS-AIRFRAME-JACKET-BEIGE-M",
+        "price": 409000,
+        "compareAtPrice": 500000,
+        "inventory": 0,
+        "options": {
+          "color": "Beige",
+          "size": "M"
         }
       },
       {
@@ -674,6 +989,26 @@ export const whoseStudioProducts: SeedProduct[] = [
         }
       },
       {
+        "sku": "WHS-AIRFRAME-JACKET-BEIGE-XL",
+        "price": 409000,
+        "compareAtPrice": 500000,
+        "inventory": 0,
+        "options": {
+          "color": "Beige",
+          "size": "XL"
+        }
+      },
+      {
+        "sku": "WHS-AIRFRAME-JACKET-WHITE-M",
+        "price": 409000,
+        "compareAtPrice": 500000,
+        "inventory": 0,
+        "options": {
+          "color": "White",
+          "size": "M"
+        }
+      },
+      {
         "sku": "WHS-AIRFRAME-JACKET-WHITE-L",
         "price": 409000,
         "compareAtPrice": 500000,
@@ -681,6 +1016,16 @@ export const whoseStudioProducts: SeedProduct[] = [
         "options": {
           "color": "White",
           "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-AIRFRAME-JACKET-WHITE-XL",
+        "price": 409000,
+        "compareAtPrice": 500000,
+        "inventory": 0,
+        "options": {
+          "color": "White",
+          "size": "XL"
         }
       }
     ],
@@ -729,6 +1074,15 @@ export const whoseStudioProducts: SeedProduct[] = [
         "options": {
           "color": "Đen",
           "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-DENIM-JACKET-DEN-EN-XL",
+        "price": 320000,
+        "inventory": 0,
+        "options": {
+          "color": "Đen",
+          "size": "XL"
         }
       }
     ],
@@ -784,6 +1138,15 @@ export const whoseStudioProducts: SeedProduct[] = [
           "color": "Indigo",
           "size": "L"
         }
+      },
+      {
+        "sku": "WHS-DENIM-JACKET-INDIGO-INDIGO-XL",
+        "price": 320000,
+        "inventory": 0,
+        "options": {
+          "color": "Indigo",
+          "size": "XL"
+        }
       }
     ],
     "images": [
@@ -838,6 +1201,15 @@ export const whoseStudioProducts: SeedProduct[] = [
           "color": "Kem",
           "size": "L"
         }
+      },
+      {
+        "sku": "WHS-DENIM-JACKET-KEM-KEM-XL",
+        "price": 320000,
+        "inventory": 0,
+        "options": {
+          "color": "Kem",
+          "size": "XL"
+        }
       }
     ],
     "images": [
@@ -891,6 +1263,15 @@ export const whoseStudioProducts: SeedProduct[] = [
         "options": {
           "color": "Rêu",
           "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-DENIM-JACKET-REU-REU-XL",
+        "price": 320000,
+        "inventory": 0,
+        "options": {
+          "color": "Rêu",
+          "size": "XL"
         }
       }
     ],
@@ -1171,6 +1552,42 @@ export const whoseStudioProducts: SeedProduct[] = [
           "color": "Beige",
           "size": "S"
         }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--BEIGE-M",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Beige",
+          "size": "M"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--BEIGE-L",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Beige",
+          "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--BEIGE-XL",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Beige",
+          "size": "XL"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--BEIGE-XXL",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Beige",
+          "size": "XXL"
+        }
       }
     ],
     "images": [
@@ -1211,6 +1628,42 @@ export const whoseStudioProducts: SeedProduct[] = [
         "inventory": 0,
         "options": {
           "size": "S",
+          "color": "Beige"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--M-BEIGE",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "size": "M",
+          "color": "Beige"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--L-BEIGE",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "size": "L",
+          "color": "Beige"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--XL-BEIGE",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "size": "XL",
+          "color": "Beige"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--XXL-BEIGE",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "size": "XXL",
           "color": "Beige"
         }
       }
@@ -1255,6 +1708,42 @@ export const whoseStudioProducts: SeedProduct[] = [
           "color": "Black",
           "size": "S"
         }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--BLACK-M",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Black",
+          "size": "M"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--BLACK-L",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Black",
+          "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--BLACK-XL",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Black",
+          "size": "XL"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--BLACK-XXL",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Black",
+          "size": "XXL"
+        }
       }
     ],
     "images": [
@@ -1296,6 +1785,42 @@ export const whoseStudioProducts: SeedProduct[] = [
         "options": {
           "color": "Brown",
           "size": "S"
+        }
+      },
+      {
+        "sku": "WHS-NHAN-BAN-TU-WIDE-STR-BROWN-M",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Brown",
+          "size": "M"
+        }
+      },
+      {
+        "sku": "WHS-NHAN-BAN-TU-WIDE-STR-BROWN-L",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Brown",
+          "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-NHAN-BAN-TU-WIDE-STR-BROWN-XL",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Brown",
+          "size": "XL"
+        }
+      },
+      {
+        "sku": "WHS-NHAN-BAN-TU-WIDE-STR-BROWN-XXL",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Brown",
+          "size": "XXL"
         }
       }
     ],
@@ -1339,6 +1864,42 @@ export const whoseStudioProducts: SeedProduct[] = [
           "color": "Dark Blue",
           "size": "S"
         }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--DARK-BLUE-M",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Dark Blue",
+          "size": "M"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--DARK-BLUE-L",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Dark Blue",
+          "size": "L"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--DARK-BLUE-XL",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Dark Blue",
+          "size": "XL"
+        }
+      },
+      {
+        "sku": "WHS-WIDE-STRAIGHT-JEANS--DARK-BLUE-XXL",
+        "price": 280000,
+        "inventory": 0,
+        "options": {
+          "color": "Dark Blue",
+          "size": "XXL"
+        }
       }
     ],
     "images": [
@@ -1353,304 +1914,6 @@ export const whoseStudioProducts: SeedProduct[] = [
         "storageKey": "seed/products/wide-straight-jeans-dang-suong-dark-blue-1.jpg",
         "alt": "Dark Blue",
         "sortOrder": 1
-      }
-    ]
-  },
-  {
-    "name": "CORE / HOODIE ZIP",
-    "slug": "san-pham-test-5",
-    "description": "Khác from Whose Studio. Premium streetwear for everyday wear.",
-    "status": "active",
-    "metaTitle": "CORE / HOODIE ZIP | Whose Studio",
-    "metaDescription": "Khác from Whose Studio. Premium streetwear for everyday wear.",
-    "variants": [
-      {
-        "sku": "WHS-SAN-PHAM-TEST-5-XAM-S",
-        "price": 700000,
-        "inventory": 10,
-        "options": {
-          "color": "Xám",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-5-EN-S",
-        "price": 700000,
-        "inventory": 10,
-        "options": {
-          "color": "Đen",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-5-XAM-M",
-        "price": 700000,
-        "inventory": 10,
-        "options": {
-          "color": "Xám",
-          "size": "M"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-5-EN-M",
-        "price": 700000,
-        "inventory": 10,
-        "options": {
-          "color": "Đen",
-          "size": "M"
-        }
-      }
-    ],
-    "images": [
-      {
-        "url": "https://pub-ef48cee25c9e46b7ba7d26fd8d79918d.r2.dev/seed/products/san-pham-test-5-0.png",
-        "storageKey": "seed/products/san-pham-test-5-0.png",
-        "alt": "CORE / HOODIE ZIP",
-        "sortOrder": 0
-      }
-    ]
-  },
-  {
-    "name": "CORE / HOODIE ZIP",
-    "slug": "san-pham-test-6",
-    "description": "Khác from Whose Studio. Premium streetwear for everyday wear.",
-    "status": "active",
-    "metaTitle": "CORE / HOODIE ZIP | Whose Studio",
-    "metaDescription": "Khác from Whose Studio. Premium streetwear for everyday wear.",
-    "variants": [
-      {
-        "sku": "WHS-SAN-PHAM-TEST-6-XAM-S",
-        "price": 350000,
-        "inventory": 10,
-        "options": {
-          "color": "Xám",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-6-EN-S",
-        "price": 350000,
-        "inventory": 10,
-        "options": {
-          "color": "Đen",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-6-XAM-M",
-        "price": 350000,
-        "inventory": 10,
-        "options": {
-          "color": "Xám",
-          "size": "M"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-6-EN-M",
-        "price": 350000,
-        "inventory": 10,
-        "options": {
-          "color": "Đen",
-          "size": "M"
-        }
-      }
-    ],
-    "images": [
-      {
-        "url": "https://pub-ef48cee25c9e46b7ba7d26fd8d79918d.r2.dev/seed/products/san-pham-test-6-0.png",
-        "storageKey": "seed/products/san-pham-test-6-0.png",
-        "alt": "CORE / HOODIE ZIP",
-        "sortOrder": 0
-      }
-    ]
-  },
-  {
-    "name": "PRIVATE / SHIRT",
-    "slug": "san-pham-test-1",
-    "description": "Bộ sưu tập Spring Summer 2025 tập trung vào việc tôn vinh phong cách đơn giản mà đẹp mắt, kết hợp với những chi tiết tinh tế để tạo điểm nhấn.Gam màu: Từ những tông màu trung tính như xám, xanh navy đến những sắc màu pastel nhẹ nhàng như xanh bạc hà, hồng phấn, gìn giữ sự tươi mới mà vẫn đảm chất công sở.Chất liệu: Được lựa chọn kỹ lưỡng, các loại vải cao cấp như linen, cotton pha lụa và bamboo mang lại cảm giác thoáng mát, thoải mái trong những ngày nắng nóng.Phom dáng: Trang phục được may đo tinh xảo, với phom dáng slim-fit lịch lãm hoặc relaxed-fit thoải mái, phù hợp với nhiều dáng người.",
-    "status": "active",
-    "metaTitle": "PRIVATE / SHIRT | Whose Studio",
-    "metaDescription": "Bộ sưu tập Spring Summer 2025 tập trung vào việc tôn vinh phong cách đơn giản mà đẹp mắt, kết hợp với những chi tiết tinh tế để tạo điểm nhấn.Gam màu: Từ những ",
-    "variants": [
-      {
-        "sku": "WHS-SAN-PHAM-TEST-1-EN-S",
-        "price": 599000,
-        "compareAtPrice": 699000,
-        "inventory": 10,
-        "options": {
-          "color": "Đen",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-1-TRANG-S",
-        "price": 599000,
-        "compareAtPrice": 699000,
-        "inventory": 10,
-        "options": {
-          "color": "Trắng",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-1-XAM-S",
-        "price": 599000,
-        "compareAtPrice": 699000,
-        "inventory": 10,
-        "options": {
-          "color": "Xám",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-1-EN-M",
-        "price": 599000,
-        "compareAtPrice": 699000,
-        "inventory": 10,
-        "options": {
-          "color": "Đen",
-          "size": "M"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-1-TRANG-M",
-        "price": 599000,
-        "compareAtPrice": 699000,
-        "inventory": 10,
-        "options": {
-          "color": "Trắng",
-          "size": "M"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-1-XAM-M",
-        "price": 599000,
-        "compareAtPrice": 699000,
-        "inventory": 10,
-        "options": {
-          "color": "Xám",
-          "size": "M"
-        }
-      }
-    ],
-    "images": [
-      {
-        "url": "https://pub-ef48cee25c9e46b7ba7d26fd8d79918d.r2.dev/seed/products/san-pham-test-1-0.png",
-        "storageKey": "seed/products/san-pham-test-1-0.png",
-        "alt": "PRIVATE / SHIRT",
-        "sortOrder": 0
-      }
-    ]
-  },
-  {
-    "name": "STATEMENT / LONGSLEEVE",
-    "slug": "san-pham-test-2",
-    "description": "Bộ sưu tập Spring Summer 2025 tập trung vào việc tôn vinh phong cách đơn giản mà đẹp mắt, kết hợp với những chi tiết tinh tế để tạo điểm nhấn.Gam màu: Từ những tông màu trung tính như xám, xanh navy đến những sắc màu pastel nhẹ nhàng như xanh bạc hà, hồng phấn, gìn giữ sự tươi mới mà vẫn đảm chất công sở.Chất liệu: Được lựa chọn kỹ lưỡng, các loại vải cao cấp như linen, cotton pha lụa và bamboo mang lại cảm giác thoáng mát, thoải mái trong những ngày nắng nóng.Phom dáng: Trang phục được may đo tinh xảo, với phom dáng slim-fit lịch lãm hoặc relaxed-fit thoải mái, phù hợp với nhiều dáng người.",
-    "status": "active",
-    "metaTitle": "STATEMENT / LONGSLEEVE | Whose Studio",
-    "metaDescription": "Bộ sưu tập Spring Summer 2025 tập trung vào việc tôn vinh phong cách đơn giản mà đẹp mắt, kết hợp với những chi tiết tinh tế để tạo điểm nhấn.Gam màu: Từ những ",
-    "variants": [
-      {
-        "sku": "WHS-SAN-PHAM-TEST-2-EN-S",
-        "price": 700000,
-        "compareAtPrice": 950000,
-        "inventory": 10,
-        "options": {
-          "color": "Đen",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-2-TRANG-S",
-        "price": 700000,
-        "compareAtPrice": 950000,
-        "inventory": 10,
-        "options": {
-          "color": "Trắng",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-2-EN-M",
-        "price": 700000,
-        "compareAtPrice": 950000,
-        "inventory": 10,
-        "options": {
-          "color": "Đen",
-          "size": "M"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-2-TRANG-M",
-        "price": 700000,
-        "compareAtPrice": 950000,
-        "inventory": 10,
-        "options": {
-          "color": "Trắng",
-          "size": "M"
-        }
-      }
-    ],
-    "images": [
-      {
-        "url": "https://pub-ef48cee25c9e46b7ba7d26fd8d79918d.r2.dev/seed/products/san-pham-test-2-0.png",
-        "storageKey": "seed/products/san-pham-test-2-0.png",
-        "alt": "STATEMENT / LONGSLEEVE",
-        "sortOrder": 0
-      }
-    ]
-  },
-  {
-    "name": "STATEMENT / LONGSLEEVE",
-    "slug": "san-pham-test-3",
-    "description": "Khác from Whose Studio. Premium streetwear for everyday wear.",
-    "status": "active",
-    "metaTitle": "STATEMENT / LONGSLEEVE | Whose Studio",
-    "metaDescription": "Khác from Whose Studio. Premium streetwear for everyday wear.",
-    "variants": [
-      {
-        "sku": "WHS-SAN-PHAM-TEST-3-TRANG-S",
-        "price": 400000,
-        "inventory": 10,
-        "options": {
-          "color": "Trắng",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-3-EN-S",
-        "price": 400000,
-        "inventory": 10,
-        "options": {
-          "color": "Đen",
-          "size": "S"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-3-TRANG-M",
-        "price": 400000,
-        "inventory": 10,
-        "options": {
-          "color": "Trắng",
-          "size": "M"
-        }
-      },
-      {
-        "sku": "WHS-SAN-PHAM-TEST-3-EN-M",
-        "price": 400000,
-        "inventory": 10,
-        "options": {
-          "color": "Đen",
-          "size": "M"
-        }
-      }
-    ],
-    "images": [
-      {
-        "url": "https://pub-ef48cee25c9e46b7ba7d26fd8d79918d.r2.dev/seed/products/san-pham-test-3-0.png",
-        "storageKey": "seed/products/san-pham-test-3-0.png",
-        "alt": "STATEMENT / LONGSLEEVE",
-        "sortOrder": 0
       }
     ]
   }
@@ -1726,13 +1989,13 @@ export const whoseStudioCollections: SeedCollection[] = [
     "name": "Best Sellers",
     "slug": "best-sellers",
     "description": "Top picks from the Whose Studio catalog.",
-    "imageUrl": "https://pub-ef48cee25c9e46b7ba7d26fd8d79918d.r2.dev/seed/products/san-pham-test-5-0.png",
+    "imageUrl": "https://pub-ef48cee25c9e46b7ba7d26fd8d79918d.r2.dev/seed/products/blinkstar-tshirt-black-0.jpg",
     "productSlugs": [
-      "san-pham-test-5",
-      "san-pham-test-6",
-      "san-pham-test-1",
-      "san-pham-test-2",
-      "san-pham-test-3"
+      "blinkstar-tshirt-black",
+      "bodyfit-tee",
+      "arch-hoodie-zip",
+      "airframe-jacket",
+      "wide-straight-jeans-dang-suong-black"
     ]
   }
 ];

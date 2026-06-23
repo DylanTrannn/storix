@@ -1,4 +1,4 @@
-import type { AddToCartInput, AddToWishlistInput, Cart, CheckoutInput, Order, UpdateCartItemInput } from '@storix/shared';
+import type { AddToCartInput, AddToWishlistInput, Cart, CheckoutInput, Order, ProductDetail, UpdateCartItemInput } from '@storix/shared';
 
 async function storefrontRequest<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
@@ -32,6 +32,10 @@ async function storefrontRequest<T>(path: string, init?: RequestInit): Promise<T
 
 export function getStorefrontCart() {
   return storefrontRequest<Cart>('/api/cart');
+}
+
+export function getStorefrontProductBySlug(slug: string) {
+  return storefrontRequest<ProductDetail>(`/api/products/${encodeURIComponent(slug)}`);
 }
 
 export function addToStorefrontCart(data: AddToCartInput) {

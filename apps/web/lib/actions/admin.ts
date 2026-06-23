@@ -12,6 +12,7 @@ import type {
   ReorderProductImagesInput,
   UpdateCollectionInput,
   UpdateProductInput,
+  UpdateProductImageInput,
   UpdateProductVariantInput,
 } from '@storix/shared';
 import { getValidAccessToken } from '@/lib/auth/session';
@@ -74,6 +75,59 @@ export async function deleteProductAction(id: string) {
   revalidatePath('/admin/products');
 }
 
+export async function deleteProductVariantAction(productId: string, variantId: string) {
+  const client = await getAuthedClient();
+  await client.deleteProductVariant(productId, variantId);
+  const product = await client.getProduct(productId);
+  revalidatePath('/admin/products');
+  revalidatePath(`/products/${product.slug}`);
+  return product;
+}
+
+export interface SyncVariantInput {
+  id?: string;
+  sku: string;
+  price: number;
+  compareAtPrice?: number;
+  inventory: number;
+  options: Record<string, string>;
+  imageUrl?: string | null;
+}
+
+export async function syncProductVariantsAction(
+  productId: string,
+  variants: SyncVariantInput[],
+  _existingVariantIds: string[],
+  mediaOptionName?: string | null,
+) {
+  const client = await getAuthedClient();
+  const currentProduct = await client.getProduct(productId);
+
+  for (const existing of currentProduct.variants) {
+    await client.deleteProductVariant(productId, existing.id);
+  }
+
+  for (const variant of variants) {
+    const payload = {
+      sku: variant.sku,
+      price: variant.price,
+      compareAtPrice: variant.compareAtPrice,
+      inventory: variant.inventory,
+      options: variant.options,
+      ...(mediaOptionName
+        ? { imageUrl: null }
+        : { imageUrl: variant.imageUrl ?? undefined }),
+    };
+
+    await client.createProductVariant(productId, payload);
+  }
+
+  const product = await client.getProduct(productId);
+  revalidatePath('/admin/products');
+  revalidatePath(`/products/${product.slug}`);
+  return product;
+}
+
 export async function presignUploadAction(data: PresignUploadInput) {
   const client = await getAuthedClient();
   return client.presignUpload(data);
@@ -112,6 +166,42 @@ export async function deleteProductImageAction(productId: string, imageId: strin
   const client = await getAuthedClient();
   const product = await client.deleteProductImage(productId, imageId);
   revalidatePath(`/admin/products/${productId}`);
+  return product;
+}
+
+export async function updateProductImageAction(
+  productId: string,
+  imageId: string,
+  data: UpdateProductImageInput,
+) {
+  const client = await getAuthedClient();
+  const product = await client.updateProductImage(productId, imageId, data);
+  revalidatePath('/admin/products');
+  revalidatePath(`/admin/products/${productId}`);
+  revalidatePath(`/products/${product.slug}`);
+  return product;
+}
+
+export async function syncProductImageMetadataAction(
+  productId: string,
+  images: Array<{
+    id?: string;
+    alt?: string | null;
+    linkedOptions?: Record<string, string> | null;
+  }>,
+) {
+  const client = await getAuthedClient();
+  for (const image of images) {
+    if (!image.id) continue;
+    await client.updateProductImage(productId, image.id, {
+      alt: image.alt ?? undefined,
+      linkedOptions: image.linkedOptions ?? null,
+    });
+  }
+  const product = await client.getProduct(productId);
+  revalidatePath('/admin/products');
+  revalidatePath(`/admin/products/${productId}`);
+  revalidatePath(`/products/${product.slug}`);
   return product;
 }
 

@@ -17,6 +17,7 @@ import {
   BatchCreateProductImagesSchema,
   ProductListQuerySchema,
   ReorderProductImagesSchema,
+  UpdateProductImageSchema,
   UpdateProductSchema,
   UpdateProductVariantSchema,
 } from '@storix/shared';
@@ -27,6 +28,7 @@ import type {
   CreateProductVariantInput,
   ProductListQuery,
   ReorderProductImagesInput,
+  UpdateProductImageInput,
   UpdateProductInput,
   UpdateProductVariantInput,
 } from '@storix/shared';
@@ -166,6 +168,19 @@ export class ProductController {
     @Body(new ZodValidationPipe(ReorderProductImagesSchema)) body: ReorderProductImagesInput,
   ) {
     return this.productService.reorderImages(id, body);
+  }
+
+  @Patch(':id/images/:imageId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update product image metadata (admin)' })
+  updateImage(
+    @Param('id') id: string,
+    @Param('imageId') imageId: string,
+    @Body(new ZodValidationPipe(UpdateProductImageSchema)) body: UpdateProductImageInput,
+  ) {
+    return this.productService.updateImage(id, imageId, body);
   }
 
   @Post(':id/images')

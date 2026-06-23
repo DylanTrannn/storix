@@ -8,11 +8,15 @@ import { buildQueryHref } from '@/lib/storefront-pagination';
 interface AdminSearchBarProps {
   search: string;
   placeholder?: string;
+  status?: string;
+  limit?: number;
 }
 
 export function AdminSearchBar({
   search,
   placeholder = 'Tìm kiếm…',
+  status,
+  limit,
 }: AdminSearchBarProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -27,6 +31,8 @@ export function AdminSearchBar({
         router.push(
           buildQueryHref(pathname, {
             search: nextSearch || undefined,
+            status: status || undefined,
+            limit: limit && limit !== 10 ? limit : undefined,
             page: undefined,
           }),
         );

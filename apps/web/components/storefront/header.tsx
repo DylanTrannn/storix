@@ -2,8 +2,8 @@ import Link from 'next/link';
 import type { Collection } from '@storix/shared';
 import { CircleUser, Heart, LayoutDashboard } from 'lucide-react';
 import { CartDrawerTrigger, HeaderIconLink } from '@/components/cart/cart-drawer-trigger';
+import { CollectionsNav } from '@/components/storefront/collections-nav';
 import { MobileNav } from '@/components/storefront/mobile-nav';
-import { ShopNavMenu } from '@/components/storefront/shop-nav-menu';
 import { StorefrontSearch } from '@/components/storefront/storefront-search';
 
 interface StorefrontHeaderProps {
@@ -21,7 +21,7 @@ export function StorefrontHeader({ collections, isAdmin = false }: StorefrontHea
         Skip to main content
       </a>
       <header className="sticky top-0 z-40 border-b border-border/80 bg-background/90 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
             className="heading-display text-xl tracking-tight transition-opacity duration-200 hover:opacity-80 sm:text-2xl"
@@ -29,11 +29,9 @@ export function StorefrontHeader({ collections, isAdmin = false }: StorefrontHea
             Storix
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
-            <ShopNavMenu collections={collections} />
-          </nav>
+          <CollectionsNav collections={collections} className="hidden md:flex" />
 
-          <div className="flex items-center gap-0.5">
+          <div className="flex items-center justify-end gap-0.5">
             <StorefrontSearch />
             <HeaderIconLink href="/wishlist" label="Wishlist">
               <Heart className="h-5 w-5" />

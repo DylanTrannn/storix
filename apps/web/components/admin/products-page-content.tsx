@@ -2,11 +2,18 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { ImageIcon, Pencil, Trash2 } from 'lucide-react';
 import type { ProductDetail, ProductStatus } from '@storix/shared';
 import { Button } from '@storix/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@storix/ui/select';
 import { AdminPagination } from '@/components/admin/admin-pagination';
 import { AdminSearchBar } from '@/components/admin/admin-search-bar';
 import { AdminTable } from '@/components/admin/admin-table';
@@ -17,6 +24,7 @@ import { adminIconButtonClass } from '@/components/admin/admin-button-styles';
 import { ProductForm } from '@/components/admin/product-form';
 import { ProductStatusSelect } from '@/components/admin/product-status-select';
 import { formatPrice } from '@/lib/utils';
+import { buildQueryHref } from '@/lib/storefront-pagination';
 import {
   deleteProductAction,
   getAdminProductAction,
@@ -34,9 +42,11 @@ interface ProductRow {
 interface ProductsPageContentProps {
   products: ProductRow[];
   page: number;
+  limit: number;
   totalPages: number;
   total: number;
   search: string;
+  status: string;
 }
 
 function ProductThumbnail({ name, imageUrl }: { name: string; imageUrl?: string | null }) {
@@ -70,15 +80,23 @@ function ProductNameLink({ name, slug }: Pick<ProductRow, 'name' | 'slug'>) {
 export function ProductsPageContent({
   products,
   page,
+  limit,
   totalPages,
   total,
   search,
+  status,
 }: ProductsPageContentProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [editOpen, setEditOpen] = useState(false);
   const [editProduct, setEditProduct] = useState<ProductDetail | null>(null);
   const [editLoading, setEditLoading] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<ProductRow | null>(null);
+  const [visibleProducts, setVisibleProducts] = useState(products);
+
+  useEffect(() => {
+    setVisibleProducts(products);
+  }, [products]);
 
   async function openEdit(productId: string) {
     setEditOpen(true);
@@ -101,8 +119,14 @@ export function ProductsPageContent({
 
   async function handleDelete() {
     if (!deleteTarget) return;
-    await deleteProductAction(deleteTarget.id);
-    router.refresh();
+    const deleted = deleteTarget;
+    setDeleteTarget(null);
+    setVisibleProducts((current) => current.filter((product) => product.id !== deleted.id));
+    try {
+      await deleteProductAction(deleted.id);
+    } finally {
+      router.refresh();
+    }
   }
 
   return (
@@ -116,6 +140,7 @@ export function ProductsPageContent({
             triggerLabel="Thêm sản phẩm"
             title="Thêm sản phẩm"
             description="Tạo sản phẩm mới trong danh mục."
+            maxWidthClass="max-w-4xl"
           >
             {({ onSuccess, onCancel }) => (
               <ProductForm
@@ -130,14 +155,46 @@ export function ProductsPageContent({
         }
       />
 
-      <div className="mb-4">
-        <AdminSearchBar search={search} placeholder="Tìm sản phẩm theo tên…" />
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <AdminSearchBar
+          search={search}
+          status={status}
+          limit={limit}
+          placeholder="Tìm sản phẩm theo tên…"
+        />
+        <Select
+          value={status || 'all'}
+          onValueChange={(value) => {
+            router.push(
+              buildQueryHref(pathname, {
+                search: search || undefined,
+                status: value === 'all' ? undefined : value,
+                limit: limit === 10 ? undefined : limit,
+                page: undefined,
+              }),
+            );
+          }}
+        >
+          <SelectTrigger className="h-9 w-full bg-background sm:w-[180px]">
+            <SelectValue placeholder="Trạng thái" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tất cả trạng thái</SelectItem>
+            <SelectItem value="active">Đang bán</SelectItem>
+            <SelectItem value="draft">Bản nháp</SelectItem>
+            <SelectItem value="archived">Lưu trữ</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <AdminTable
-        data={products}
+        data={visibleProducts}
         getRowKey={(row) => row.id}
-        emptyMessage={search ? 'Không tìm thấy sản phẩm phù hợp.' : 'Chưa có sản phẩm nào.'}
+        emptyMessage={
+          search || status
+            ? 'Không tìm thấy sản phẩm phù hợp.'
+            : 'Chưa có sản phẩm nào.'
+        }
         columns={[
           {
             key: 'name',
@@ -205,10 +262,13 @@ export function ProductsPageContent({
 
       <AdminPagination
         page={page}
+        limit={limit}
         totalPages={totalPages}
         total={total}
         search={search || undefined}
+        status={status || undefined}
         itemLabel="sản phẩm"
+        showPageSize
         className="mt-4"
       />
 
@@ -220,6 +280,7 @@ export function ProductsPageContent({
         }}
         title="Sửa sản phẩm"
         description={editProduct?.name ?? 'Cập nhật thông tin sản phẩm.'}
+        maxWidthClass="max-w-4xl"
       >
         {({ onSuccess, onCancel }) =>
           editLoading ? (
@@ -236,25 +297,16 @@ export function ProductsPageContent({
                 metaTitle: editProduct.metaTitle ?? undefined,
                 metaDescription: editProduct.metaDescription ?? undefined,
               }}
-              defaultVariant={
-                editProduct.variants[0]
-                  ? {
-                      id: editProduct.variants[0].id,
-                      sku: editProduct.variants[0].sku,
-                      price: editProduct.variants[0].price,
-                      compareAtPrice: editProduct.variants[0].compareAtPrice,
-                      inventory: editProduct.variants[0].inventory,
-                    }
-                  : undefined
-              }
-              variantCount={editProduct.variants.length}
+              initialVariants={editProduct.variants}
               initialImages={editProduct.images.map((img) => ({
                 id: img.id,
                 url: img.url,
                 storageKey: img.storageKey,
                 alt: img.alt,
                 sortOrder: img.sortOrder,
+                linkedOptions: img.linkedOptions,
               }))}
+              initialMediaOptionName={editProduct.mediaOptionName}
               onSuccess={() => {
                 onSuccess();
                 closeEdit();
